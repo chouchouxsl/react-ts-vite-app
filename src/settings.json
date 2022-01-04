@@ -1,8 +1,8 @@
 {
-    "colorWeek": false,
     "navbar": true,
     "menu": true,
     "footer": true,
     "themeColor": "#165DFF",
-    "menuWidth": 220
+    "menuWidth": 220,
+    "title": "React Ts Pro"
 }

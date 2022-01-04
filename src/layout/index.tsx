@@ -1,15 +1,19 @@
 import LoadingBar from '@/components/LoadingBar'
+import Navbar from '@/components/Navbar'
 import { routes, IRoutes, defaultRoute } from '@/route'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { isArray } from '@/utils/is'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
-import React, { useMemo, useRef, useState, lazy } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import styles from './style/layout.module.less'
 //  vite 动态引入 需要维护一个 动态表
 const modules = import.meta.glob('../pages/*/index.tsx')
 import loadable from '@loadable/component'
 import useLocale from '@/hooks/useLocale'
+import { useSelector } from 'react-redux'
+import { ReducerState } from '@/redux'
+import Footer from '@/components/Footer'
 
 console.log('modules :>> ', modules)
 
@@ -109,10 +113,6 @@ function PageLayout() {
     const locale = useLocale()
     console.log('locale :>> ', locale)
 
-    // 默认nav高度
-    const defaultNavBarHeight = 60
-    const defaultSiderWidth = 48
-
     // 格式化路由 使用useMemo进行缓存 只会调用一次getFlattenRoutes
     const flattenRoutes = useMemo(() => getFlattenRoutes(), [])
     // 侧边栏按钮 是否伸缩collapsed
@@ -122,10 +122,13 @@ function PageLayout() {
         setCollapsed(collapsed => !collapsed)
     }
     // 初始下
-    const menuWidth = collapsed ? defaultSiderWidth : 200
-    const showNavbar = false
-    const showMenu = true
-    const showFooter = true
+    const settings = useSelector((state: ReducerState) => state.global.settings)
+    const defaultNavBarHeight = 60
+    const defaultSiderWidth = 48
+    const menuWidth = collapsed ? defaultSiderWidth : settings?.menuWidth
+    const showNavbar = settings?.navbar || true
+    const showMenu = settings?.menu || true
+    const showFooter = settings?.footer || false
     const paddingLeft = showMenu ? { paddingLeft: menuWidth } : {}
     const paddingTop = showNavbar ? { paddingTop: defaultNavBarHeight } : {}
     const paddingStyle = { ...paddingLeft, ...paddingTop }
@@ -143,7 +146,7 @@ function PageLayout() {
     return (
         <Layout className={styles.layout}>
             <LoadingBar ref={loadingBarRef} />
-            {showNavbar && <div className={styles.layoutNavbar}></div>}
+            {showNavbar && <Navbar className={styles.layoutNavbar} />}
             <Layout>
                 {showMenu && (
                     <Sider
@@ -181,7 +184,7 @@ function PageLayout() {
                             <Redirect push to={`/${defaultRoute}`} />
                         </Switch>
                     </Content>
-                    {/* {showFooter && <Footer />} */}
+                    {showFooter && <Footer />}
                 </Layout>
             </Layout>
         </Layout>

@@ -1,5 +1,10 @@
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, createStore, Action } from 'redux'
 import global, { GlobalState } from './reducers/global'
+
+export interface IAcition extends Action<string> {
+    type: string
+    payload?: any
+}
 
 export interface ReducerState {
     global: GlobalState
