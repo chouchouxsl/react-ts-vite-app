@@ -1,7 +1,6 @@
 **/*.svg
 **/*.ico
 package.json
-/dist
 .DS_Store
 .eslintignore
 *.png
