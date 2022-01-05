@@ -1,12 +1,14 @@
+import path from 'path'
 import { ConfigEnv, loadEnv, UserConfig } from 'vite'
+import { ViteEnv } from './src/typings/config'
 import createVitePlugins from './config/vite-plugins'
 import { themeColor } from './src/settings.json'
-import path from 'path'
+
 const dirPath = (dir: string) => path.resolve(dir)
 
 // https://vitejs.dev/config/
 export default ({ mode, command }: ConfigEnv): UserConfig => {
-    const env = loadEnv(mode, process.cwd())
+    const env: ViteEnv = loadEnv(mode, process.cwd())
     console.log('env command:>> ', env, command)
     const isBuild = command === 'build'
 
@@ -29,8 +31,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
             alias: {
                 '@': dirPath('src'),
                 '#': dirPath('src/typings'),
-                '@assets': dirPath('src/assets'),
-                '@components': dirPath('src/components')
+                assets: dirPath('src/assets'),
+                components: dirPath('src/components')
             }
         },
         server: {

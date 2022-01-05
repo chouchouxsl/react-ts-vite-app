@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ESNext",
         "useDefineForClassFields": true,
-        "lib": ["DOM", "DOM.Iterable", "ESNext", "es5"],
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
         "allowJs": false,
         "skipLibCheck": true,
         "esModuleInterop": false,
@@ -16,9 +16,13 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "baseUrl": ".",
+        "types": [
+            "vite/client"
+        ] /* 指定引入的类型声明文件，默认是自动引入所有声明文件，一旦指定该选项，则会禁用自动引入，改为只引入指定的类型声明文件，如果指定空数组[]则不引用任何文件 */,
+        "typeRoots": ["./node_modules/@types/", "./src/typings"],
         "paths": {
             "@/*": ["src/*"],
-            "typings/*": ["src/typings/*"],
+            "#/*": ["src/typings/*"],
             "components/*": ["src/components/*"],
             "styles/*": ["src/styles/*"],
             "utils/*": ["src/utils/*"],
@@ -27,5 +31,5 @@
         }
     },
     "include": ["src/**/*.ts", "src/**/*.tsx"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "dist"]
 }
