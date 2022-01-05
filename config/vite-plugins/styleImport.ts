@@ -9,7 +9,7 @@ import styleImport from 'vite-plugin-style-import'
  * @return {*}  驼峰命名字符串
  */
 function lineToHump(s: string): string {
-    let a = s.split('-')
+    const a = s.split('-')
     let result = a[0]
     for (let i = 1; i < a.length; i++) {
         result = result + a[i].slice(0, 1).toUpperCase() + a[i].slice(1)

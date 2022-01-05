@@ -1,3 +1,3 @@
 export default () => {
-  return localStorage.getItem('userStatus') === 'login';
-};
+    return localStorage.getItem('userStatus') === 'login'
+}

@@ -1,18 +1,18 @@
 import React, { useMemo, useState, lazy } from 'react'
-import { routes, IRoutes, defaultRoute } from '@/route'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { ReducerState } from '@/redux'
-import { isArray } from '@/utils/is'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
-//  vite 动态引入 需要维护一个 动态表
-const modules = import.meta.glob('../pages/*/index.tsx')
+import { ReducerState } from '@/redux'
+import { isArray } from '@/utils/is'
+import { routes, IRoutes, defaultRoute } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 // 样式
 import styles from './style/layout.module.less'
+//  vite 动态引入 需要维护一个 动态表
+const modules = import.meta.glob('../pages/*/index.tsx')
 
 console.log('modules :>> ', modules)
 

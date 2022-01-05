@@ -1,21 +1,22 @@
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState, Suspense, useMemo } from 'react'
 import ReactDOM from 'react-dom'
-import Nprogress from '@/components/Nprogress'
 import './style/index.less'
-import PageLayout from '@/layout'
-import store from '@/redux'
 import { Provider } from 'react-redux'
-import { history } from '@/route'
 import { Router, Switch, Route } from 'react-router-dom'
 import { ConfigProvider } from '@arco-design/web-react'
 import zhCN from '@arco-design/web-react/es/locale/zh-CN'
 import enUS from '@arco-design/web-react/es/locale/en-US'
+import { history } from '@/route'
+import store from '@/redux'
+import PageLayout from '@/layout'
+import Nprogress from '@/components/Nprogress'
 import { GlobalContext } from '@/hooks/useLocale'
 
 const Index: React.FC = () => {
     /* 国际化 */
     const localName = localStorage.getItem('locale') || 'zh-CN'
     const [locale, setLocale] = useState<Record<string, string>>({})
+    const context = useMemo(() => ({ locale }), [locale])
 
     if (!localStorage.getItem('locale')) {
         localStorage.setItem('locale', localName)
@@ -52,7 +53,7 @@ const Index: React.FC = () => {
             <Suspense fallback={<Nprogress />}>
                 <ConfigProvider locale={getLocal()}>
                     <Provider store={store}>
-                        <GlobalContext.Provider value={{ locale }}>
+                        <GlobalContext.Provider value={context}>
                             <Switch>
                                 <Route path="/" component={PageLayout} />
                             </Switch>

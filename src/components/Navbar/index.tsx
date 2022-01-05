@@ -1,10 +1,10 @@
 import React from 'react'
-import { ReducerState } from '@/redux'
 import { useDispatch, useSelector } from 'react-redux'
-import styles from './style/index.module.less'
 import { Avatar, Button, Dropdown, Menu, Select, Space, Tooltip, Typography } from '@arco-design/web-react'
-import useLocale, { ILocaleContent } from '@/hooks/useLocale'
 import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
+import { ReducerState } from '@/redux'
+import styles from './style/index.module.less'
+import useLocale, { ILocaleContent } from '@/hooks/useLocale'
 import { history } from '@/route'
 
 interface INavBar {
@@ -57,7 +57,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                             bordered={false}
                             value={currLocale}
                             onChange={toggleLocale}
-                        ></Select>
+                        />
                     </li>
                     <li>
                         <Tooltip

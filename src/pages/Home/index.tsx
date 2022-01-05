@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import style from './style/index.module.less'
 import { Button } from '@arco-design/web-react'
+import style from './style/index.module.less'
 
 class Home extends Component {
     render() {
