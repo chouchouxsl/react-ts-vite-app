@@ -1,4 +1,4 @@
-import { IconGift } from '@arco-design/web-react/icon'
+import { IconGift, IconSelectAll } from '@arco-design/web-react/icon'
 
 export interface IRoutes {
     path: string
@@ -22,5 +22,26 @@ export const routes: IRoutes[] = [
         exact: true,
         icon: <IconGift />,
         componentKey: 'Home'
+    },
+    {
+        path: '/list',
+        key: 'list',
+        name: 'menu.list',
+        exact: false,
+        icon: <IconSelectAll />,
+        children: [
+            {
+                path: '/list/page1',
+                key: 'list/page1',
+                name: 'list1',
+                componentKey: 'List'
+            },
+            {
+                path: '/list/page2',
+                key: 'list/page2',
+                name: 'list2',
+                componentKey: 'List'
+            }
+        ]
     }
 ]

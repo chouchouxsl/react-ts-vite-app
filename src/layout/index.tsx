@@ -1,16 +1,18 @@
-import React, { useMemo, useState, lazy } from 'react'
+import React, { useMemo, useState, lazy, useEffect } from 'react'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
+import qs from 'query-string'
 import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
-import { routes, IRoutes, defaultRoute } from '@/route'
+import { routes, IRoutes, defaultRoute, history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 // 样式
 import styles from './style/layout.module.less'
+import getUrlParams from '@/utils/get-url-params'
 //  vite 动态引入 需要维护一个 动态表
 const modules = import.meta.glob('../pages/*/index.tsx')
 
@@ -60,12 +62,12 @@ function renderRoutes(locale: any) {
             // 路由内容Dom
             const contentDom = (
                 <>
-                    {route.icon} {locale[route.name]}
+                    {route.icon} {locale[route.name] || route.name}
                 </>
             )
 
             // 判断是不是没有children的菜单 直接使用MenuItem组件
-            if (route.component && (!isArray(route.children) || (isArray(route.children) && !route.children?.length))) {
+            if (!isArray(route.children) || (isArray(route.children) && !route.children?.length)) {
                 // 不是一级菜单的 直接返回
                 if (level > 1) {
                     return <MenuItem key={route.key}> {contentDom}</MenuItem>
@@ -79,7 +81,7 @@ function renderRoutes(locale: any) {
             }
 
             // 如果存在childrem 需要使用SubMenu组件包裹
-            if (route.component && isArray(route.children) && route.children?.length) {
+            if (isArray(route.children) && route.children?.length) {
                 // 不是一级菜单的 直接返回
                 if (level > 1) {
                     return (
@@ -110,7 +112,6 @@ function renderRoutes(locale: any) {
 function PageLayout() {
     // 国际化
     const locale = useLocale()
-    console.log('locale :>> ', locale)
 
     // 格式化路由 使用useMemo进行缓存 只会调用一次getFlattenRoutes
     const flattenRoutes = useMemo(() => getFlattenRoutes(), [])
@@ -133,11 +134,23 @@ function PageLayout() {
     const paddingStyle = { ...paddingLeft, ...paddingTop }
 
     // 默认展开项
-    const defaultSelectedKeys = [defaultRoute]
+    // const urlParams = getUrlParams()
+    const pathname = history.location.pathname
+    const currentComponent = qs.parseUrl(pathname).url.slice(1)
+    const defaultSelectedKeys = [currentComponent || defaultRoute]
+    console.log('defaultSelectedKeys :>> ', defaultSelectedKeys)
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
 
-    // 点击菜单的回调
-    function onClickMenuItem() {}
+    // 解决 点击返回 前进 刷新 侧边栏不变问题
+    useEffect(() => {
+        setSelectedKeys(defaultSelectedKeys)
+    }, [currentComponent])
+
+    // 点击菜单的回调 跳路由
+    function onClickMenuItem(key: string) {
+        const currRoute = flattenRoutes.find(route => route.key === key)
+        history.replace(currRoute?.path ? currRoute.path : `/${key}`)
+    }
 
     return (
         <Layout className={styles.layout}>

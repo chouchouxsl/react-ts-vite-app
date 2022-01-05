@@ -1,3 +1,4 @@
 export default {
-    'menu.home': 'Home'
+    'menu.home': 'Home',
+    'menu.list': 'List'
 }
