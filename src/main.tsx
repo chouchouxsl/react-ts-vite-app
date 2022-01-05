@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import ReactDOM from 'react-dom'
+import Nprogress from '@/components/Nprogress'
 import './style/index.less'
 import PageLayout from '@/layout'
 import store from '@/redux'
@@ -45,19 +46,20 @@ const Index: React.FC = () => {
     useEffect(() => {
         fetchLocale()
     }, [])
-    // history.listen()
 
     return (
         <Router history={history}>
-            <ConfigProvider locale={getLocal()}>
-                <Provider store={store}>
-                    <GlobalContext.Provider value={{ locale }}>
-                        <Switch>
-                            <Route path="/" component={PageLayout} />
-                        </Switch>
-                    </GlobalContext.Provider>
-                </Provider>
-            </ConfigProvider>
+            <Suspense fallback={<Nprogress />}>
+                <ConfigProvider locale={getLocal()}>
+                    <Provider store={store}>
+                        <GlobalContext.Provider value={{ locale }}>
+                            <Switch>
+                                <Route path="/" component={PageLayout} />
+                            </Switch>
+                        </GlobalContext.Provider>
+                    </Provider>
+                </ConfigProvider>
+            </Suspense>
         </Router>
     )
 }

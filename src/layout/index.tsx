@@ -1,19 +1,18 @@
-import LoadingBar from '@/components/LoadingBar'
-import Navbar from '@/components/Navbar'
+import React, { useMemo, useState, lazy } from 'react'
 import { routes, IRoutes, defaultRoute } from '@/route'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
-import React, { useMemo, useRef, useState } from 'react'
-import styles from './style/layout.module.less'
 //  vite 动态引入 需要维护一个 动态表
 const modules = import.meta.glob('../pages/*/index.tsx')
-import loadable from '@loadable/component'
 import useLocale from '@/hooks/useLocale'
-import { useSelector } from 'react-redux'
-import { ReducerState } from '@/redux'
+import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+// 样式
+import styles from './style/layout.module.less'
 
 console.log('modules :>> ', modules)
 
@@ -35,7 +34,7 @@ function getFlattenRoutes() {
     const recursion = (_routes: IRoutes[]) => {
         _routes.forEach((route: IRoutes) => {
             if (route.componentKey) {
-                route.component = loadable(modules[`../pages/${route.componentKey}/index.tsx`] as any)
+                route.component = lazy(modules[`../pages/${route.componentKey}/index.tsx`] as any)
                 newRoutes.push(route)
             } else if (isArray(route.children) && (route.children as IRoutes[]).length) {
                 recursion(route.children as IRoutes[])
@@ -137,15 +136,11 @@ function PageLayout() {
     const defaultSelectedKeys = [defaultRoute]
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
 
-    // 状态条
-    const loadingBarRef = useRef(null)
-
     // 点击菜单的回调
     function onClickMenuItem() {}
 
     return (
         <Layout className={styles.layout}>
-            <LoadingBar ref={loadingBarRef} />
             {showNavbar && <Navbar className={styles.layoutNavbar} />}
             <Layout>
                 {showMenu && (
