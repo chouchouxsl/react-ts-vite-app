@@ -2,7 +2,7 @@
     "navbar": true,
     "menu": true,
     "footer": true,
-    "themeColor": "#165DFF",
+    "themeColor": "#f85959",
     "menuWidth": 220,
     "title": "React Ts Pro"
 }

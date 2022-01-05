@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import './style/index.less'
-import '@arco-design/web-react/dist/css/arco.css'
 import PageLayout from '@/layout'
 import store from '@/redux'
 import { Provider } from 'react-redux'
@@ -46,6 +45,7 @@ const Index: React.FC = () => {
     useEffect(() => {
         fetchLocale()
     }, [])
+    // history.listen()
 
     return (
         <Router history={history}>

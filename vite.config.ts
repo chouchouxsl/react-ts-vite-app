@@ -1,25 +1,49 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { ConfigEnv, loadEnv, UserConfig } from 'vite'
+import createVitePlugins from './config/vite-plugins'
+import { themeColor } from './src/settings.json'
 import path from 'path'
+const dirPath = (dir: string) => path.resolve(dir)
 
 // https://vitejs.dev/config/
-export default defineConfig({
-    plugins: [react()],
-    css: {
-        preprocessorOptions: {
-            less: {
-                // 支持内联js
-                javascriptEnabled: true
-                // 重写less变量，定制样式
-                // modifyVars:variablesConfig
+export default ({ mode, command }: ConfigEnv): UserConfig => {
+    const env = loadEnv(mode, process.cwd())
+    console.log('env command:>> ', env, command)
+    const isBuild = command === 'build'
+
+    return {
+        base: isBuild ? '/dist' : '/',
+        plugins: createVitePlugins(env, isBuild),
+        css: {
+            preprocessorOptions: {
+                less: {
+                    // 支持内联js
+                    javascriptEnabled: true,
+                    // 重写less变量，定制样式
+                    modifyVars: {
+                        'arcoblue-6': themeColor
+                    }
+                }
+            }
+        },
+        resolve: {
+            alias: {
+                '@': dirPath('src'),
+                '#': dirPath('src/typings'),
+                '@assets': dirPath('src/assets'),
+                '@components': dirPath('src/components')
+            }
+        },
+        server: {
+            port: 9999,
+            open: false
+        },
+        build: {
+            sourcemap: !isBuild,
+            terserOptions: {
+                compress: {
+                    drop_console: isBuild
+                }
             }
         }
-    },
-    resolve: {
-        alias: {
-            '@': path.resolve('src'),
-            '@assets': path.resolve('src/assets'),
-            '@components': path.resolve('src/components')
-        }
     }
-})
+}
