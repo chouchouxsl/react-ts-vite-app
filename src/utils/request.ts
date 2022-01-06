@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { Message } from '@arco-design/web-react'
 import { isShowNprogress } from '@/settings.json'
 import fetchErrorStatus from '@/utils/fetchErrorStatus'
 
@@ -30,13 +31,12 @@ class NewAxios {
         this.instance.interceptors.request.use(
             config => {
                 // 请求时的进度条
-                nprogress.start()
-                console.log(config)
+                this.isShowNprogress && nprogress.start()
                 return config
             },
             error => {
+                Message.error(error)
                 nprogress.done()
-                console.log('全局请求失败拦截', error)
             }
         )
 
@@ -45,16 +45,21 @@ class NewAxios {
             res => {
                 nprogress.done()
                 // res为AxiosResponse类型，含有config\data\headers\request\status\statusText属性
-                console.log(res)
+                const data = res.data
+                if (data.code === -1 || !data) {
+                    const msg = data.message || '请求失败'
+                    Message.error(msg)
+                    return Promise.reject(res)
+                }
                 // 改造返回的数据类型，即将AxiosResponse的data返回
-                return res.data
+                return data
             },
             error => {
                 nprogress.done()
-                console.log('全局响应失败拦截')
-                console.log(error.request)
-                console.log(error.response)
-                return error
+                const status = error.response.status
+                const msg = fetchErrorStatus(status)
+                Message.error(msg || '请求错误')
+                return Promise.reject(msg)
             }
         )
     }
