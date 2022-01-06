@@ -46,13 +46,8 @@ class NewAxios {
                 nprogress.done()
                 // res为AxiosResponse类型，含有config\data\headers\request\status\statusText属性
                 const data = res.data
-                if (data.code === -1 || !data) {
-                    const msg = data.message || '请求失败'
-                    Message.error(msg)
-                    return Promise.reject(res)
-                }
                 // 改造返回的数据类型，即将AxiosResponse的data返回
-                return data
+                return data && data.code !== -1 ? data : Promise.reject(data.message || '请求失败')
             },
             error => {
                 nprogress.done()
@@ -72,6 +67,7 @@ class NewAxios {
                     resolve(res)
                 })
                 .catch(err => {
+                    Message.error(err || '请求错误')
                     reject(err)
                 })
         })

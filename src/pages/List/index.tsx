@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from '@arco-design/web-react'
+import { Button, Input } from '@arco-design/web-react'
 import { getListApi, addListApi } from '@/api/common'
 
 const List: React.FC = () => {
     const [list, setList] = useState<any[]>([])
+    const [id, setId] = useState<string>('1')
+
+    useEffect(() => {
+        getList()
+    }, [])
 
     async function getList() {
-        const res = await getListApi({ id: 1 })
-        console.log('res :>> ', res)
+        const res = await getListApi({ id })
         setList(res.data)
     }
 
@@ -23,6 +27,9 @@ const List: React.FC = () => {
                         <li key={item.id}>{item.id}</li>
                     ))}
                 </ul>
+            </div>
+            <div>
+                <Input value={id} onChange={val => setId(val)} />
             </div>
             <div>
                 <Button onClick={getList}>获取列表</Button>
