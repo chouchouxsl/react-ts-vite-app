@@ -6,6 +6,7 @@ declare module '*/settings.json' {
         themeColor: string
         menuWidth: number
         title: string
+        isShowNprogress: boolean
     }
 
     export default value

@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
 import { Button } from '@arco-design/web-react'
 import style from './style/index.module.less'
+import { GlobalContext } from '@/context/globalContext'
 
 class Home extends Component {
     render() {
         return (
-            <div className={style.pages}>
-                <Button>哈哈</Button>
-            </div>
+            <GlobalContext.Consumer>
+                {ctx => (
+                    <div className={style.pages}>
+                        <Button>哈哈</Button>
+                        <div>{ctx.locale!['menu.home']}</div>
+                    </div>
+                )}
+            </GlobalContext.Consumer>
         )
     }
 }
