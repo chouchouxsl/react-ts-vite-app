@@ -12,7 +12,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 // 样式
 import styles from './style/layout.module.less'
-import getUrlParams from '@/utils/get-url-params'
+import { setPageTitle } from '@/utils/set-page-title'
 //  vite 动态引入 需要维护一个 动态表
 const modules = import.meta.glob('../pages/*/index.tsx')
 
@@ -121,7 +121,7 @@ function PageLayout() {
     const toggleCollapse = () => {
         setCollapsed(collapsed => !collapsed)
     }
-    // 初始下
+    // 初始下设置
     const settings = useSelector((state: ReducerState) => state.global.settings)
     const defaultNavBarHeight = 60
     const defaultSiderWidth = 48
@@ -133,22 +133,29 @@ function PageLayout() {
     const paddingTop = showNavbar ? { paddingTop: defaultNavBarHeight } : {}
     const paddingStyle = { ...paddingLeft, ...paddingTop }
 
-    // 默认展开项
-    // const urlParams = getUrlParams()
+    // 默认选中菜单
     const pathname = history.location.pathname
     const currentComponent = qs.parseUrl(pathname).url.slice(1)
     const defaultSelectedKeys = [currentComponent || defaultRoute]
-    console.log('defaultSelectedKeys :>> ', defaultSelectedKeys)
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
+    const currRoute = getCurrRoute(defaultSelectedKeys[0])
+    const pageTitle = locale![currRoute!.name] || currRoute!.name
+    setPageTitle(pageTitle)
 
     // 解决 点击返回 前进 刷新 侧边栏不变问题
     useEffect(() => {
         setSelectedKeys(defaultSelectedKeys)
     }, [currentComponent])
 
+    function getCurrRoute(key: string) {
+        return flattenRoutes.find(route => route.key === key)
+    }
+
     // 点击菜单的回调 跳路由
     function onClickMenuItem(key: string) {
-        const currRoute = flattenRoutes.find(route => route.key === key)
+        const currRoute = getCurrRoute(key)
+        const pageTitle = locale![currRoute!.name] || currRoute!.name
+        setPageTitle(pageTitle)
         history.replace(currRoute?.path ? currRoute.path : `/${key}`)
     }
 
@@ -186,7 +193,6 @@ function PageLayout() {
                     <Content>
                         <Switch>
                             {flattenRoutes.map(route => {
-                                console.log('route :>> ', route)
                                 return <Route key={route.key} path={`${route.path}`} component={route.component} />
                             })}
                             <Redirect push to={`/${defaultRoute}`} />
