@@ -1,10 +1,5 @@
-import { useContext, createContext } from 'react'
-
-export interface ILocaleContent {
-    locale?: Record<string, string>
-}
-
-export const GlobalContext = createContext<ILocaleContent>({})
+import { useContext } from 'react'
+import { GlobalContext } from '@/context/globalContext'
 
 function useLocale() {
     const { locale } = useContext(GlobalContext)

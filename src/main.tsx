@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom'
 import './style/index.less'
 import { Provider } from 'react-redux'
 import { Router, Switch, Route } from 'react-router-dom'
-import { ConfigProvider } from '@arco-design/web-react'
+import { ConfigProvider, Spin } from '@arco-design/web-react'
 import zhCN from '@arco-design/web-react/es/locale/zh-CN'
 import enUS from '@arco-design/web-react/es/locale/en-US'
 import { history } from '@/route'
 import store from '@/redux'
 import PageLayout from '@/layout'
-import Nprogress from '@/components/Nprogress'
-import { GlobalContext } from '@/hooks/useLocale'
+import { GlobalContext } from '@/context/globalContext'
 
 const Index: React.FC = () => {
     /* 国际化 */
@@ -50,7 +49,21 @@ const Index: React.FC = () => {
 
     return (
         <Router history={history}>
-            <Suspense fallback={<Nprogress />}>
+            <Suspense
+                fallback={
+                    <div
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            width: '100%',
+                            height: '100vh'
+                        }}
+                    >
+                        <Spin dot tip="加载中..." />
+                    </div>
+                }
+            >
                 <ConfigProvider locale={getLocal()}>
                     <Provider store={store}>
                         <GlobalContext.Provider value={context}>
