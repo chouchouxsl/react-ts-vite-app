@@ -1,5 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-# 不添加指令 执行脚本
-npx --no-install lint-staged
