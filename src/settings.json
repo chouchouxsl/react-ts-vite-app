@@ -1,0 +1,9 @@
+{
+    "navbar": true,
+    "menu": true,
+    "footer": true,
+    "themeColor": "#F77234",
+    "menuWidth": 220,
+    "title": "React Ts Pro",
+    "isShowNprogress": true
+}

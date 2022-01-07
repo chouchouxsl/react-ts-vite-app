@@ -1,0 +1,24 @@
+# node_modules
+node_modules
+
+# .DS_Store
+.DS_Store
+
+# public
+dist
+build
+
+# config
+*.local
+.vscode
+
+# yarn
+yarn.lock
+yarn-error.log
+
+
+# .pnpm-debug.log
+.pnpm-debug.log
+
+# .eslintcache
+.eslintcache
