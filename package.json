@@ -22,7 +22,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint:fix": "eslint --cache --ext .js,.jsx,.ts,.tsx --no-error-on-unmatched-pattern --quiet --fix ./src",
-    "lint:style": "stylelint  \"src/**/*.(less|css)\" --fix --custom-syntax postcss-less"
+    "lint:style": "stylelint  \"src/**/*.(less|css)\" --fix --custom-syntax postcss-less",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.27.1",
@@ -40,6 +41,8 @@
     "redux": "^4.1.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.0.1",
+    "@commitlint/config-conventional": "^16.0.0",
     "@types/mockjs": "^1.0.4",
     "@types/node": "^17.0.5",
     "@types/nprogress": "^0.2.0",
@@ -58,7 +61,9 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-typescript": "^0.14.0",
+    "husky": "^7.0.4",
     "less": "^4.1.2",
+    "lint-staged": "^12.1.5",
     "postcss": "^8.4.5",
     "postcss-less": "^5.0.0",
     "prettier": "^2.5.1",
@@ -74,6 +79,22 @@
     "vite-plugin-html": "^2.1.2",
     "vite-plugin-mock": "^2.9.6",
     "vite-plugin-style-import": "^1.4.1"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,json}": [
+      "prettier --write",
+      "npm run lint:fix",
+      "git add"
+    ],
+    "**/*.{css,less}": [
+      "prettier --write",
+      "npm run lint:style",
+      "git add"
+    ],
+    "*.{json,md,yml,css}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "browserslist": [
     "> 0.5%",
