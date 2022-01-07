@@ -32,7 +32,7 @@ module.exports = {
         // 兼容rgba写法
         'color-function-notation': 'legacy',
         // 颜色指定大写
-        'color-hex-case': 'lower',
+        'color-hex-case': null,
         // 禁止空块
         'block-no-empty': true,
         // 颜色6位长度
@@ -73,9 +73,9 @@ module.exports = {
         // property-no-vendor-prefix
         'property-no-vendor-prefix': true,
         // 禁止小于 1 的小数有一个前导零
-        'number-leading-zero': 'always',
+        'number-leading-zero': null,
         // 禁止空第一行
-        'no-empty-first-line': true,
+        'no-empty-first-line': null,
         // 属性的排序
         'order/properties-order': [
             'position',

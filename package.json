@@ -23,7 +23,8 @@
     "preview": "vite preview",
     "lint:fix": "eslint --cache --ext .js,.jsx,.ts,.tsx --no-error-on-unmatched-pattern --quiet --fix ./src",
     "lint:style": "stylelint  \"src/**/*.(less|css)\" --fix --custom-syntax postcss-less",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "style-check": "stylelint-config-prettier-check"
   },
   "dependencies": {
     "@arco-design/web-react": "^2.27.1",
