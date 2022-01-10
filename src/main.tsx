@@ -10,10 +10,11 @@ import { history } from '@/route'
 import store from '@/redux'
 import PageLayout from '@/layout'
 import { GlobalContext } from '@/context/globalContext'
+import { LocaleType } from '#/config'
 
 const Index: React.FC = () => {
     /* 国际化 */
-    const localName = localStorage.getItem('locale') || 'zh-CN'
+    const localName: LocaleType = (localStorage.getItem('locale') as string as LocaleType) || 'zh-CN'
     const [locale, setLocale] = useState<Record<string, string>>({})
     const context = useMemo(() => ({ locale }), [locale])
 
@@ -32,7 +33,7 @@ const Index: React.FC = () => {
         }
     }
 
-    const getPath = (localName: string) => {
+    const getPath = (localName: LocaleType) => {
         const path = `./locale/${localName}.ts`
         const modules = import.meta.globEager('./locale/*.ts')
         return modules[path].default

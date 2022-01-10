@@ -5,6 +5,13 @@ import { Message } from '@arco-design/web-react'
 import { isShowNprogress } from '@/settings.json'
 import fetchErrorStatus from '@/utils/fetchErrorStatus'
 
+interface Result<T = any> {
+    code: number
+    type?: 'success' | 'error' | 'warning'
+    message: string
+    data: T
+}
+
 // 设置 false 关闭小圆圈
 nprogress.configure({ showSpinner: false })
 
@@ -100,6 +107,6 @@ export const getFetch = newAxios.get.bind(newAxios)
 
 export const postFetch = newAxios.post.bind(newAxios)
 
-export type { AxiosInstance, AxiosRequestConfig, AxiosResponse }
+export type { AxiosInstance, AxiosRequestConfig, AxiosResponse, Result }
 
 export default newAxios

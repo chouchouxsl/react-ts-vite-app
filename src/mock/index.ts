@@ -13,13 +13,15 @@ export default [
                             'id|+1': 1
                         }
                     ],
-                    message: '请求成功'
+                    message: '请求成功',
+                    type: 'success'
                 }
             }
             return {
                 code: -1,
                 data: null,
-                message: '请求失败'
+                message: '请求失败',
+                type: 'error'
             }
         }
     },
@@ -31,7 +33,9 @@ export default [
             console.log('data :>> ', data)
             return {
                 code: 0,
-                message: '添加成功'
+                message: '添加成功',
+                data: null,
+                type: 'success'
             }
         }
         // rawResponse: async (req, res) => {
