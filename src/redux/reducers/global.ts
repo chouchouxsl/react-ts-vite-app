@@ -15,6 +15,7 @@ export interface GlobalState {
     }
 }
 
+// 自动设置监听系统主题变化
 if (defaultSettings.isSystemTheme) {
     localStorage.setItem('theme', darkTheme.matches ? 'dark' : 'light')
 }

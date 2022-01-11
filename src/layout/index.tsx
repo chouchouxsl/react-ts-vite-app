@@ -134,6 +134,7 @@ function PageLayout() {
     const paddingTop = showNavbar ? { paddingTop: defaultNavBarHeight } : {}
     const paddingStyle = { ...paddingLeft, ...paddingTop }
 
+    // 自动设置监听系统主题变化
     if (settings?.isSystemTheme) {
         const dispatch = useDispatch()
         darkTheme.addListener(e => {
