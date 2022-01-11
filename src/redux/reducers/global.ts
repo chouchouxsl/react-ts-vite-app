@@ -1,9 +1,10 @@
-import defaultSettings from '@/settings.json'
+import defaultSettings, { ISettings } from '@/settings.json'
 import { IAcition } from '@/redux'
+import darkTheme from '@/utils/systemTheme'
 
 export interface GlobalState {
     theme?: string
-    settings?: typeof defaultSettings
+    settings?: ISettings
     userInfo?: {
         name?: string
         avatar?: string
@@ -12,6 +13,10 @@ export interface GlobalState {
         location?: string
         email?: string
     }
+}
+
+if (defaultSettings.isSystemTheme) {
+    localStorage.setItem('theme', darkTheme.matches ? 'dark' : 'light')
 }
 
 const defaultTheme: GlobalState['theme'] = localStorage.getItem('theme') || 'light'

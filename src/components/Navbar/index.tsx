@@ -4,8 +4,9 @@ import { Avatar, Button, Dropdown, Menu, Select, Space, Tooltip, Typography } fr
 import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
 import { ReducerState } from '@/redux'
 import styles from './style/index.module.less'
-import useLocale, { ILocaleContent } from '@/hooks/useLocale'
+import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
+import { ILocaleContent } from '@/context/globalContext'
 
 interface INavBar {
     className: string

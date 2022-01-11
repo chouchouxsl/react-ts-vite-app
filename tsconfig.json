@@ -30,6 +30,6 @@
             "redux/*": ["src/redux/*"]
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx"],
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/typings/*.d.ts", "vite.config.ts"],
     "exclude": ["node_modules", "dist"]
 }

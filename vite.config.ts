@@ -13,7 +13,7 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
     const isBuild = command === 'build'
 
     return {
-        base: isBuild ? '/dist' : '/',
+        base: isBuild ? '/dist/' : '/',
         plugins: createVitePlugins(env, isBuild),
         css: {
             preprocessorOptions: {

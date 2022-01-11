@@ -1,6 +1,6 @@
 import React, { useMemo, useState, lazy, useEffect } from 'react'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
 import qs from 'query-string'
@@ -10,6 +10,7 @@ import { routes, IRoutes, defaultRoute, history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import darkTheme from '@/utils/systemTheme'
 // 样式
 import styles from './style/layout.module.less'
 import { setPageTitle } from '@/utils/set-page-title'
@@ -132,6 +133,16 @@ function PageLayout() {
     const paddingLeft = showMenu ? { paddingLeft: menuWidth } : {}
     const paddingTop = showNavbar ? { paddingTop: defaultNavBarHeight } : {}
     const paddingStyle = { ...paddingLeft, ...paddingTop }
+
+    if (settings?.isSystemTheme) {
+        const dispatch = useDispatch()
+        darkTheme.addListener(e => {
+            dispatch({
+                type: 'toggle-theme',
+                payload: { theme: e.matches ? 'dark' : 'light' }
+            })
+        })
+    }
 
     // 默认选中菜单
     const pathname = history.location.pathname

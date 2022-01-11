@@ -1,5 +1,6 @@
-declare module '*/settings.json' {
-    const value: {
+declare module '@/settings.json' {
+    export interface ISettings {
+        isSystemTheme: boolean
         navbar: boolean
         menu: boolean
         footer: boolean
@@ -9,5 +10,7 @@ declare module '*/settings.json' {
         isShowNprogress: boolean
     }
 
-    export default value
+    const settings: ISettings
+
+    export default settings
 }
