@@ -7,6 +7,7 @@ import styles from './style/index.module.less'
 import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
 import { ILocaleContent } from '@/context/globalContext'
+import { ThemeEnum } from '@/enums/globalEnums'
 
 interface INavBar {
     className: string
@@ -63,18 +64,18 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                     <li>
                         <Tooltip
                             content={
-                                theme === 'light'
+                                theme === ThemeEnum.LIGHT
                                     ? locale!['settings.navbar.theme.toDark']
                                     : locale!['settings.navbar.theme.toLight']
                             }
                         >
                             <Button
                                 type="text"
-                                icon={theme === 'light' ? <IconMoonFill /> : <IconSunFill />}
+                                icon={theme === ThemeEnum.LIGHT ? <IconMoonFill /> : <IconSunFill />}
                                 onClick={() =>
                                     dispatch({
                                         type: 'toggle-theme',
-                                        payload: { theme: theme === 'light' ? 'dark' : 'light' }
+                                        payload: { theme: theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT }
                                     })
                                 }
                                 style={{ fontSize: 20 }}

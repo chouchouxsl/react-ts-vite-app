@@ -14,6 +14,7 @@ import darkTheme from '@/utils/systemTheme'
 // 样式
 import styles from './style/layout.module.less'
 import { setPageTitle } from '@/utils/set-page-title'
+import { ThemeEnum } from '@/enums/globalEnums'
 //  vite 动态引入 需要维护一个 动态表
 const modules = import.meta.glob('../pages/*/index.tsx')
 
@@ -140,7 +141,7 @@ function PageLayout() {
         darkTheme.addListener(e => {
             dispatch({
                 type: 'toggle-theme',
-                payload: { theme: e.matches ? 'dark' : 'light' }
+                payload: { theme: e.matches ? ThemeEnum.DARK : ThemeEnum.LIGHT }
             })
         })
     }

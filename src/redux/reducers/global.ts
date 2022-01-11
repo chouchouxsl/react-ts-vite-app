@@ -1,6 +1,7 @@
 import defaultSettings, { ISettings } from '@/settings.json'
 import { IAcition } from '@/redux'
 import darkTheme from '@/utils/systemTheme'
+import { ThemeEnum } from '@/enums/globalEnums'
 
 export interface GlobalState {
     theme?: string
@@ -17,10 +18,10 @@ export interface GlobalState {
 
 // 自动设置监听系统主题变化
 if (defaultSettings.isSystemTheme) {
-    localStorage.setItem('theme', darkTheme.matches ? 'dark' : 'light')
+    localStorage.setItem('theme', darkTheme.matches ? ThemeEnum.DARK : ThemeEnum.LIGHT)
 }
 
-const defaultTheme: GlobalState['theme'] = localStorage.getItem('theme') || 'light'
+const defaultTheme: GlobalState['theme'] = localStorage.getItem('theme') || ThemeEnum.LIGHT
 
 const defaultUserInfo: GlobalState['userInfo'] = {
     name: 'rhz',
@@ -28,8 +29,8 @@ const defaultUserInfo: GlobalState['userInfo'] = {
 }
 
 function changeTheme(newTheme?: string) {
-    if ((newTheme || defaultTheme) === 'dark') {
-        document.body.setAttribute('arco-theme', 'dark')
+    if ((newTheme || defaultTheme) === ThemeEnum.DARK) {
+        document.body.setAttribute('arco-theme', ThemeEnum.DARK)
     } else {
         document.body.removeAttribute('arco-theme')
     }
@@ -48,7 +49,7 @@ export default function (state: GlobalState = initialState, action: IAcition) {
     switch (action.type) {
         case 'toggle-theme': {
             const { theme } = action.payload
-            if (theme === 'light' || theme === 'dark') {
+            if (theme === ThemeEnum.LIGHT || theme === ThemeEnum.DARK) {
                 localStorage.setItem('theme', theme)
                 changeTheme(theme)
             }

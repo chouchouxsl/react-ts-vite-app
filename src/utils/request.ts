@@ -2,11 +2,12 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from '@arco-design/web-react'
-import { isShowNprogress } from '@/settings.json'
+import settings from '@/settings.json'
 import fetchErrorStatus from '@/utils/fetchErrorStatus'
+import { ContentTypeEnum, RequestEnum, ResultCodeEnum } from '@/enums/requsetEnums'
 
 interface Result<T = any> {
-    code: number
+    code: ResultCodeEnum
     type?: 'success' | 'error' | 'warning'
     message: string
     data: T
@@ -54,7 +55,7 @@ class NewAxios {
                 // res为AxiosResponse类型，含有config\data\headers\request\status\statusText属性
                 const data = res.data
                 // 改造返回的数据类型，即将AxiosResponse的data返回
-                return data && data.code !== -1 ? data : Promise.reject(data.message || '请求失败')
+                return data && data.code !== ResultCodeEnum.ERROR ? data : Promise.reject(data.message || '请求失败')
             },
             error => {
                 nprogress.done()
@@ -84,24 +85,24 @@ class NewAxios {
         return this.request<T>({
             ...config,
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                'Content-Type': ContentTypeEnum.FORM_URLENCODED
             },
-            method: 'GET'
+            method: RequestEnum.GET
         })
     }
 
     post<T = any>(config: AxiosRequestConfig<T> = {}): Promise<T> {
         return this.request<T>({
             headers: {
-                'Content-Type': 'application/json;charset=utf-8'
+                'Content-Type': ContentTypeEnum.JSON
             },
             ...config,
-            method: 'POST'
+            method: RequestEnum.POST
         })
     }
 }
 
-const newAxios = new NewAxios(config, isShowNprogress)
+const newAxios = new NewAxios(config, settings.isShowNprogress)
 
 export const getFetch = newAxios.get.bind(newAxios)
 
