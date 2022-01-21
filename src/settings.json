@@ -1,9 +1,9 @@
 {
-    "isSystemTheme": true,
+    "isSystemTheme": false,
     "navbar": true,
     "menu": true,
     "footer": true,
-    "themeColor": "#F77234",
+    "themeColor": "#5A25B0",
     "menuWidth": 220,
     "title": "React Ts Pro",
     "isShowNprogress": true

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Input } from '@arco-design/web-react'
-import { getListApi, addListApi, Result } from '@/api'
+import { getListApi, addListApi } from '@/api'
 
 const List: React.FC = () => {
     const [list, setList] = useState<any[]>([])
@@ -11,9 +11,9 @@ const List: React.FC = () => {
     }, [])
 
     async function getList() {
-        const res: Result = await getListApi<{ id: string }>({ id })
+        const res = await getListApi<{ id: string }>({ id })
         console.log('res :>> ', res)
-        setList(res.data)
+        setList(res)
     }
 
     async function handlerAddList() {

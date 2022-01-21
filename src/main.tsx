@@ -11,6 +11,8 @@ import store from '@/redux'
 import PageLayout from '@/layout'
 import { GlobalContext } from '@/context/globalContext'
 import { LocaleType } from '#/config'
+import Login from './pages/Login'
+import checkLogin from './utils/checkLogin'
 
 const Index: React.FC = () => {
     /* 国际化 */
@@ -46,6 +48,9 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         fetchLocale()
+        if (!checkLogin()) {
+            history.push('/login')
+        }
     }, [])
 
     return (
@@ -69,6 +74,7 @@ const Index: React.FC = () => {
                     <Provider store={store}>
                         <GlobalContext.Provider value={context}>
                             <Switch>
+                                <Route path="/login" component={Login} />
                                 <Route path="/" component={PageLayout} />
                             </Switch>
                         </GlobalContext.Provider>

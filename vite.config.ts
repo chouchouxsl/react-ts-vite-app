@@ -23,7 +23,8 @@ export default ({ mode, command }: ConfigEnv): UserConfig => {
                     // 重写less变量，定制样式
                     modifyVars: {
                         'arcoblue-6': themeColor
-                    }
+                    },
+                    additionalData: `@import "${dirPath('src/style/var.less')}";`
                 }
             }
         },

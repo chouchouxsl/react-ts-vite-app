@@ -16,7 +16,7 @@ interface INavBar {
 const Navbar: React.FC<INavBar> = ({ className }) => {
     // redux
     const theme = useSelector((state: ReducerState) => state.global.theme)
-    const userInfo = useSelector((state: ReducerState) => state.global.userInfo)
+    const userInfo = useSelector((state: ReducerState) => state.userInfo.userInfo)
     const settings = useSelector((state: ReducerState) => state.global.settings)
     const dispatch = useDispatch()
     // 切换语言
@@ -29,7 +29,9 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
     // 登出
     const onMenuItemClick = (key: string) => {
         if (key === 'logout') {
-            localStorage.setItem('userStatus', 'logout')
+            dispatch({
+                type: 'remove-token'
+            })
             history.push('/login')
         }
     }

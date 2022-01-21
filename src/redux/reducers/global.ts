@@ -6,14 +6,6 @@ import { ThemeEnum } from '@/enums/globalEnums'
 export interface GlobalState {
     theme?: string
     settings?: ISettings
-    userInfo?: {
-        name?: string
-        avatar?: string
-        job?: string
-        organization?: string
-        location?: string
-        email?: string
-    }
 }
 
 // 自动设置监听系统主题变化
@@ -22,11 +14,6 @@ if (defaultSettings.isSystemTheme) {
 }
 
 const defaultTheme: GlobalState['theme'] = localStorage.getItem('theme') || ThemeEnum.LIGHT
-
-const defaultUserInfo: GlobalState['userInfo'] = {
-    name: 'rhz',
-    avatar: 'https://himg.bdimg.com/sys/portraitn/item/public.1.50a4952.juf-AazrjHW-E-kqX1k0-Q'
-}
 
 function changeTheme(newTheme?: string) {
     if ((newTheme || defaultTheme) === ThemeEnum.DARK) {
@@ -41,8 +28,7 @@ changeTheme()
 
 const initialState: GlobalState = {
     theme: defaultTheme,
-    settings: defaultSettings,
-    userInfo: defaultUserInfo
+    settings: defaultSettings
 }
 
 export default function (state: GlobalState = initialState, action: IAcition) {
@@ -64,13 +50,6 @@ export default function (state: GlobalState = initialState, action: IAcition) {
             return {
                 ...state,
                 settings
-            }
-        }
-        case 'update-userInfo': {
-            const { userInfo } = action.payload
-            return {
-                ...state,
-                userInfo
             }
         }
         default:

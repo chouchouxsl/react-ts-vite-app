@@ -1,5 +1,6 @@
 import { combineReducers, createStore, Action } from 'redux'
 import global, { GlobalState } from './reducers/global'
+import userInfo, { IUserInfo } from './reducers/userInfo'
 
 export interface IAcition extends Action<string> {
     type: string
@@ -8,10 +9,12 @@ export interface IAcition extends Action<string> {
 
 export interface ReducerState {
     global: GlobalState
+    userInfo: IUserInfo
 }
 
 const reducers = combineReducers({
-    global
+    global,
+    userInfo
 })
 
 const store = createStore(reducers)

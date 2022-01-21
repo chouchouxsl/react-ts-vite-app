@@ -2,6 +2,35 @@ import { MockMethod } from 'vite-plugin-mock'
 
 export default [
     {
+        url: '/api/login',
+        method: 'post',
+        timeout: 1000,
+        response: (data: any) => {
+            console.log('data :>> ', data.body)
+            if (data.body?.username === 'rhz' && data.body?.password === 'rhz123456') {
+                return {
+                    code: 0,
+                    message: '登陆成功',
+                    data: {
+                        token: '@string(13)',
+                        userInfo: {
+                            name: '@name',
+                            avatar: 'https://himg.bdimg.com/sys/portraitn/item/public.1.50a4952.juf-AazrjHW-E-kqX1k0-Q',
+                            location: '@county(true)'
+                        }
+                    },
+                    type: 'success'
+                }
+            }
+            return {
+                code: -1,
+                message: '登陆失败',
+                data: null,
+                type: 'error'
+            }
+        }
+    },
+    {
         url: '/api/list',
         method: 'get',
         response: ({ query }: any) => {

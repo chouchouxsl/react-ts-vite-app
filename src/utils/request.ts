@@ -55,7 +55,9 @@ class NewAxios {
                 // res为AxiosResponse类型，含有config\data\headers\request\status\statusText属性
                 const data = res.data
                 // 改造返回的数据类型，即将AxiosResponse的data返回
-                return data && data.code !== ResultCodeEnum.ERROR ? data : Promise.reject(data.message || '请求失败')
+                return data && data.code !== ResultCodeEnum.ERROR
+                    ? data.data
+                    : Promise.reject(data.message || '请求失败')
             },
             error => {
                 nprogress.done()
