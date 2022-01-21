@@ -6,7 +6,7 @@ export default {
     'settings.menuWidth': '菜单宽度 (px)',
     'settings.navbar.theme.toLight': '点击切换为亮色模式',
     'settings.navbar.theme.toDark': '点击切换为暗黑模式',
-    'settings.navbar.logout': '登出',
+    'settings.navbar.logout': '注销登录',
     'settings.menu': '菜单栏',
     'settings.footer': '底部',
     'settings.otherSettings': '其他设置',

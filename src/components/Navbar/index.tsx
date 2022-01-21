@@ -88,6 +88,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                         <li>
                             <Dropdown
                                 trigger="click"
+                                position="bottom"
                                 droplist={
                                     <Menu onClickMenuItem={onMenuItemClick}>
                                         <Menu.Item key="logout">{locale!['settings.navbar.logout']}</Menu.Item>
