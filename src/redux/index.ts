@@ -2,9 +2,9 @@ import { combineReducers, createStore, Action } from 'redux'
 import global, { GlobalState } from './reducers/global'
 import userInfo, { IUserInfo } from './reducers/userInfo'
 
-export interface IAcition extends Action<string> {
+export interface IAcition<T = any> extends Action<string> {
     type: string
-    payload?: any
+    payload?: T
 }
 
 export interface ReducerState {
