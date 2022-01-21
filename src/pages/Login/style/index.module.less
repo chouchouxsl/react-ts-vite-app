@@ -1,7 +1,17 @@
 .app-container {
+    position: relative;
     display: flex;
     width: 100%;
     height: 100vh;
+
+    .app-setteing {
+        position: absolute;
+        top: 0;
+        right: 30px;
+        display: flex;
+        align-items: center;
+        height: 30px;
+    }
 
     .form-warp {
         display: flex;
@@ -12,7 +22,6 @@
         .form-content {
             width: 360px;
             height: 400px;
-            background-color: @bgColor2;
 
             .form-title {
                 font-size: @textSize1;
@@ -36,6 +45,6 @@
     .banner-warp {
         width: 40%;
         flex-shrink: 0;
-        // background: url('../../../assets/bg.png') no-repeat center center / cover;
+        background: url('../../../assets/bg.png') no-repeat center center / cover;
     }
 }

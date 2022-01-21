@@ -7,7 +7,39 @@ body {
     padding: 0;
     width: 100%;
     height: 100%;
+    box-sizing: border-box;
     font-size: @textSize2;
     color: @textColor2;
     background-color: @bgColor1;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+// 继承box-sizing: border-box; 盒模型
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+a {
+    text-decoration: none;
+
+    &:focus,
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+div:focus {
+    outline: none;
 }
