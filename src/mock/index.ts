@@ -7,14 +7,14 @@ export default [
         timeout: 1000,
         response: (data: any) => {
             console.log('data :>> ', data.body)
-            if (data.body?.username === 'rhz' && data.body?.password === 'rhz123456') {
+            if (data.body?.username === 'admin' && data.body?.password === 'rhz123456') {
                 return {
                     code: 0,
                     message: '登陆成功',
                     data: {
-                        token: '@string(13)',
+                        token: '@string(50)',
                         userInfo: {
-                            name: '@name',
+                            name: 'R_h_zero',
                             avatar: 'https://himg.bdimg.com/sys/portraitn/item/public.1.50a4952.juf-AazrjHW-E-kqX1k0-Q',
                             location: '@county(true)'
                         }
