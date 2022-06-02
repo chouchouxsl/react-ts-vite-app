@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense, useMemo } from 'react'
+import React, { useEffect, Suspense, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import './style/index.less'
 import { Provider } from 'react-redux'
@@ -13,19 +13,18 @@ import { GlobalContext } from '@/context/globalContext'
 import { LocaleType } from '#/config'
 import Login from './pages/Login'
 import checkLogin from './utils/checkLogin'
+import useStorage from './hooks/useStorage'
+import changeTheme from './utils/changeTheme'
+import { LocaleEnum, ThemeEnum } from './enums/globalEnums'
 
 const Index: React.FC = () => {
     /* 国际化 */
-    const localName: LocaleType = (localStorage.getItem('locale') as string as LocaleType) || 'zh-CN'
-    const [locale, setLocale] = useState<Record<string, string>>({})
-    const context = useMemo(() => ({ locale }), [locale])
-
-    if (!localStorage.getItem('locale')) {
-        localStorage.setItem('locale', localName)
-    }
+    const [lang, setLang] = useStorage('locale', LocaleEnum.enUS)
+    /* 主题 */
+    const [theme, setTheme] = useStorage('theme', ThemeEnum.LIGHT)
 
     const getLocal = () => {
-        switch (localName) {
+        switch (lang) {
             case 'zh-CN':
                 return zhCN
             case 'en-US':
@@ -35,19 +34,13 @@ const Index: React.FC = () => {
         }
     }
 
-    const getPath = (localName: LocaleType) => {
-        const path = `./locale/${localName}.ts`
-        const modules = import.meta.globEager('./locale/*.ts')
-        return modules[path].default
-    }
-
-    const fetchLocale = async () => {
-        const locale = getPath(localName)
-        setLocale(locale)
-    }
+    const contextValue = useMemo(() => ({ lang, setLang, theme, setTheme }), [lang, theme])
 
     useEffect(() => {
-        fetchLocale()
+        changeTheme(theme)
+    }, [theme])
+
+    useEffect(() => {
         if (!checkLogin()) {
             history.push('/login')
         }
@@ -72,7 +65,7 @@ const Index: React.FC = () => {
             >
                 <ConfigProvider locale={getLocal()}>
                     <Provider store={store}>
-                        <GlobalContext.Provider value={context}>
+                        <GlobalContext.Provider value={contextValue}>
                             <Switch>
                                 <Route path="/login" component={Login} />
                                 <Route path="/" component={PageLayout} />

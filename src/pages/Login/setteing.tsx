@@ -1,24 +1,19 @@
 import { Button, Select, Tooltip } from '@arco-design/web-react'
 import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
-import React, { memo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { ILocaleContent } from '@/context/globalContext'
+import React, { useContext } from 'react'
 import { ThemeEnum } from '@/enums/globalEnums'
 import useLocale from '@/hooks/useLocale'
-import { ReducerState } from '@/redux'
 import styles from './style/index.module.less'
+import { GlobalContext } from '@/context/globalContext'
 
 const Setteing = () => {
-    // redux
-    const theme = useSelector((state: ReducerState) => state.global.theme)
-    const dispatch = useDispatch()
     // 切换语言
-    const currLocale = localStorage.getItem('locale') || 'zh-CN'
-    const locale: ILocaleContent['locale'] = useLocale()
-    const toggleLocale = (locale: string) => {
-        localStorage.setItem('locale', locale)
-        location.reload()
-    }
+    const { setLang, lang, theme, setTheme } = useContext(GlobalContext)
+
+    const t = useLocale()
+
+    const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
+
     return (
         <ul className={styles['app-setteing']}>
             <li>
@@ -33,27 +28,22 @@ const Setteing = () => {
                         position: 'bl'
                     }}
                     bordered={false}
-                    value={currLocale}
-                    onChange={toggleLocale}
+                    value={lang}
+                    onChange={setLang}
                 />
             </li>
             <li>
                 <Tooltip
                     content={
                         theme === ThemeEnum.LIGHT
-                            ? locale!['settings.navbar.theme.toDark']
-                            : locale!['settings.navbar.theme.toLight']
+                            ? t['settings.navbar.theme.toDark']
+                            : t['settings.navbar.theme.toLight']
                     }
                 >
                     <Button
                         type="text"
                         icon={theme === ThemeEnum.LIGHT ? <IconMoonFill /> : <IconSunFill />}
-                        onClick={() =>
-                            dispatch({
-                                type: 'toggle-theme',
-                                payload: { theme: theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT }
-                            })
-                        }
+                        onClick={changeTheme}
                         style={{ fontSize: 20 }}
                     />
                 </Tooltip>

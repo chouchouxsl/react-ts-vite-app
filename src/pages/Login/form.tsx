@@ -18,7 +18,7 @@ const loginForm: FC = () => {
     const [loading, setLoaing] = useState(false)
     const dispatch = useDispatch()
 
-    const locale = useLocale()
+    const t = useLocale()
 
     const onSubmit = async () => {
         try {
@@ -42,26 +42,26 @@ const loginForm: FC = () => {
     }
     return (
         <div className={styles['form-content']}>
-            <div className={styles['form-title']}>{locale['login.title']}</div>
-            <div className={styles['form-sub-title']}>{locale['login.subTitle']}</div>
+            <div className={styles['form-title']}>{t['login.title']}</div>
+            <div className={styles['form-sub-title']}>{t['login.subTitle']}</div>
             <Form className={styles['form-info']} layout="vertical" ref={formRef}>
-                <Form.Item field="username" rules={[{ required: true, message: locale['login.username.placeholder'] }]}>
+                <Form.Item field="username" rules={[{ required: true, message: t['login.username.placeholder'] }]}>
                     <Input
                         prefix={<IconUser />}
-                        placeholder={locale['login.username.placeholder']}
+                        placeholder={t['login.username.placeholder']}
                         onPressEnter={onSubmit}
                     />
                 </Form.Item>
-                <Form.Item field="password" rules={[{ required: true, message: locale['login.password.placeholder'] }]}>
+                <Form.Item field="password" rules={[{ required: true, message: t['login.password.placeholder'] }]}>
                     <Input.Password
                         prefix={<IconLock />}
-                        placeholder={locale['login.password.placeholder']}
+                        placeholder={t['login.password.placeholder']}
                         onPressEnter={onSubmit}
                     />
                 </Form.Item>
                 <Form.Item>
                     <Button loading={loading} type="primary" onClick={onSubmit} long>
-                        {locale['login.login']}
+                        {t['login.login']}
                     </Button>
                 </Form.Item>
             </Form>

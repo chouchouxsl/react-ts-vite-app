@@ -1,7 +1,10 @@
 import { createContext } from 'react'
 
-export interface ILocaleContent {
-    locale: Record<string, string>
+export interface IGlobalContent {
+    lang?: string
+    setLang?: (value: string) => void
+    theme?: string
+    setTheme?: (value: string) => void
 }
 
-export const GlobalContext = createContext<ILocaleContent>({})
+export const GlobalContext = createContext<IGlobalContent>({})

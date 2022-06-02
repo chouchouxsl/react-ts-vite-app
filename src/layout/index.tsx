@@ -10,6 +10,7 @@ import { routes, IRoutes, defaultRoute, history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import Breadcrumb from '@/components/Breadcrumb'
 import darkTheme from '@/utils/systemTheme'
 // 样式
 import styles from './style/layout.module.less'
@@ -56,7 +57,8 @@ function getFlattenRoutes() {
  * @param {any} local // 国际化
  * @return {any[]} //sideNodes
  */
-function renderRoutes(locale: any) {
+function renderRoutes(t: any) {
+    console.log('renderRoutes :>> ', t)
     const sideNodes: any[] = []
 
     function recursion(_routes: IRoutes[], level: number) {
@@ -64,7 +66,7 @@ function renderRoutes(locale: any) {
             // 路由内容Dom
             const contentDom = (
                 <>
-                    {route.icon} {locale[route.name] || route.name}
+                    {route.icon} {t[route.name] || route.name}
                 </>
             )
 
@@ -113,7 +115,7 @@ function renderRoutes(locale: any) {
  */
 function PageLayout() {
     // 国际化
-    const locale = useLocale()
+    const t = useLocale()
 
     // 格式化路由 使用useMemo进行缓存 只会调用一次getFlattenRoutes
     const flattenRoutes = useMemo(() => getFlattenRoutes(), [])
@@ -152,7 +154,7 @@ function PageLayout() {
     const defaultSelectedKeys = [currentComponent || defaultRoute]
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
     const currRoute = getCurrRoute(defaultSelectedKeys[0])
-    const pageTitle = locale![currRoute!.name] || currRoute!.name
+    const pageTitle = t[currRoute!.name] || currRoute!.name
     setPageTitle(pageTitle)
 
     // 解决 点击返回 前进 刷新 侧边栏不变问题
@@ -167,7 +169,7 @@ function PageLayout() {
     // 点击菜单的回调 跳路由
     function onClickMenuItem(key: string) {
         const currRoute = getCurrRoute(key)
-        const pageTitle = locale![currRoute!.name] || currRoute!.name
+        const pageTitle = t[currRoute!.name] || currRoute!.name
         setPageTitle(pageTitle)
         history.replace(currRoute?.path ? currRoute.path : `/${key}`)
     }
@@ -194,7 +196,7 @@ function PageLayout() {
                                 selectedKeys={selectedKeys}
                                 autoOpen
                             >
-                                {renderRoutes(locale)}
+                                {renderRoutes(t)}
                             </Menu>
                         </div>
                         <div className={styles.collapseBtn} onClick={toggleCollapse}>
@@ -204,6 +206,9 @@ function PageLayout() {
                 )}
                 <Layout className={styles.layoutContent} style={paddingStyle}>
                     <Content>
+                        <div className={styles.layoutBreadcrumbWap}>
+                            <Breadcrumb />
+                        </div>
                         <Switch>
                             {flattenRoutes.map(route => {
                                 return <Route key={route.key} path={`${route.path}`} component={route.component} />

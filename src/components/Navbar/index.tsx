@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, Button, Dropdown, Menu, Select, Space, Tooltip, Typography } from '@arco-design/web-react'
 import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
@@ -6,8 +6,8 @@ import { ReducerState } from '@/redux'
 import styles from './style/index.module.less'
 import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
-import { ILocaleContent } from '@/context/globalContext'
 import { ThemeEnum } from '@/enums/globalEnums'
+import { GlobalContext } from '@/context/globalContext'
 
 interface INavBar {
     className: string
@@ -15,17 +15,15 @@ interface INavBar {
 
 const Navbar: React.FC<INavBar> = ({ className }) => {
     // redux
-    const theme = useSelector((state: ReducerState) => state.global.theme)
     const userInfo = useSelector((state: ReducerState) => state.userInfo.userInfo)
     const settings = useSelector((state: ReducerState) => state.global.settings)
     const dispatch = useDispatch()
     // 切换语言
-    const currLocale = localStorage.getItem('locale') || 'zh-CN'
-    const locale: ILocaleContent['locale'] = useLocale()
-    const toggleLocale = (locale: string) => {
-        localStorage.setItem('locale', locale)
-        location.reload()
-    }
+    const { setLang, lang, theme, setTheme } = useContext(GlobalContext)
+    const t = useLocale()
+
+    const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
+
     // 登出
     const onMenuItemClick = (key: string) => {
         if (key === 'logout') {
@@ -59,27 +57,22 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                                 position: 'bl'
                             }}
                             bordered={false}
-                            value={currLocale}
-                            onChange={toggleLocale}
+                            value={lang}
+                            onChange={setLang}
                         />
                     </li>
                     <li>
                         <Tooltip
                             content={
                                 theme === ThemeEnum.LIGHT
-                                    ? locale!['settings.navbar.theme.toDark']
-                                    : locale!['settings.navbar.theme.toLight']
+                                    ? t['settings.navbar.theme.toDark']
+                                    : t['settings.navbar.theme.toLight']
                             }
                         >
                             <Button
                                 type="text"
                                 icon={theme === ThemeEnum.LIGHT ? <IconMoonFill /> : <IconSunFill />}
-                                onClick={() =>
-                                    dispatch({
-                                        type: 'toggle-theme',
-                                        payload: { theme: theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT }
-                                    })
-                                }
+                                onClick={changeTheme}
                                 style={{ fontSize: 20 }}
                             />
                         </Tooltip>
@@ -91,7 +84,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                                 position="bottom"
                                 droplist={
                                     <Menu onClickMenuItem={onMenuItemClick}>
-                                        <Menu.Item key="logout">{locale!['settings.navbar.logout']}</Menu.Item>
+                                        <Menu.Item key="logout">{t['settings.navbar.logout']}</Menu.Item>
                                     </Menu>
                                 }
                             >
