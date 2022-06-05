@@ -34,6 +34,7 @@ const Setteing = () => {
             </li>
             <li>
                 <Tooltip
+                    position="br"
                     content={
                         theme === ThemeEnum.LIGHT
                             ? t['settings.navbar.theme.toDark']
