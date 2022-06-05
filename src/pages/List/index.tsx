@@ -1,42 +1,41 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Input } from '@arco-design/web-react'
 import { getListApi, addListApi } from '@/api'
+import style from './style/index.module.less'
 
 const List: React.FC = () => {
     const [list, setList] = useState<any[]>([])
-    const [id, setId] = useState<string>('1')
 
     useEffect(() => {
         getList()
     }, [])
 
     async function getList() {
-        const res = await getListApi<{ id: string }>({ id })
+        const res = await getListApi<{ id?: number }>({})
         console.log('res :>> ', res)
         setList(res)
     }
 
-    async function handlerAddList() {
-        const res = await addListApi()
-        console.log('res :>> ', res)
-    }
     return (
-        <>
-            <div>
-                <ul>
-                    {list.map(item => (
-                        <li key={item.id}>{item.id}</li>
-                    ))}
-                </ul>
-            </div>
-            <div>
-                <Input value={id} onChange={val => setId(val)} />
-            </div>
-            <div>
-                <Button onClick={getList}>获取列表</Button>
-                <Button onClick={handlerAddList}>添加列表</Button>
-            </div>
-        </>
+        <div className={style.pages}>
+            {list?.map(x => (
+                <div key={x.id}>
+                    <div className={style.name}>{x.name}</div>
+                    <img src={x.avatar} className={style.avatar} alt="" />
+                    <ul className={style.warp}>
+                        {x.works.map((item: any) => (
+                            <li
+                                key={item.id}
+                                className={style.item}
+                                onClick={() => window.open(`http://javdb.com${item.href}`)}
+                            >
+                                <div>{item.title}</div>
+                                <img src={item.cover} alt="" />
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </div>
     )
 }
 

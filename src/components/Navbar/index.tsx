@@ -92,7 +92,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                                     <Avatar size={24} style={{ marginRight: 8 }}>
                                         <img alt="avatar" src={userInfo.avatar} />
                                     </Avatar>
-                                    <Typography.Text className={styles.username}>{userInfo.name}</Typography.Text>
+                                    <Typography.Text className={styles.username}>{userInfo.username}</Typography.Text>
                                 </div>
                             </Dropdown>
                         </li>

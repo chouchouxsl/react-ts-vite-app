@@ -35,12 +35,6 @@ export const routes: IRoutes[] = [
                 key: 'list/page1',
                 name: 'list1',
                 componentKey: 'List'
-            },
-            {
-                path: '/list/page2',
-                key: 'list/page2',
-                name: 'list2',
-                componentKey: 'List'
             }
         ]
     }

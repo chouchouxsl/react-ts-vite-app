@@ -3,4 +3,4 @@
 */
 
 export * from '@/utils/request'
-export * from './common'
+export * from './list'

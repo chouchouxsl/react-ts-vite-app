@@ -40,6 +40,12 @@ class NewAxios {
             config => {
                 // 请求时的进度条
                 this.isShowNprogress && nprogress.start()
+
+                const token = localStorage.getItem('token')
+                if (token) {
+                    config.headers!.token = token
+                }
+
                 return config
             },
             error => {

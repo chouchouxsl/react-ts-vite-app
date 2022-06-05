@@ -7,11 +7,7 @@ import useLocale from '@/hooks/useLocale'
 import { loginApi } from '@/api/login'
 import { IUser } from '@/redux/reducers/userInfo'
 import { history } from '@/route'
-
-interface IResponse {
-    token: string
-    userInfo: IUser
-}
+import { getUserInfoApi } from '@/api/user'
 
 const loginForm: FC = () => {
     const formRef = useRef<FormInstance>(null)
@@ -24,16 +20,19 @@ const loginForm: FC = () => {
         try {
             setLoaing(true)
             const val = await formRef.current?.validate()
-            const { token, userInfo } = await loginApi<IResponse>(val)
-            setLoaing(false)
-            dispatch({
+            const { token } = await loginApi<{ token: string }>(val)
+            await dispatch({
                 type: 'add-token',
                 payload: { token }
             })
-            dispatch({
+            const userInfo: IUser = await getUserInfoApi()
+            await dispatch({
                 type: 'update-user',
                 payload: { userInfo }
             })
+
+            setLoaing(false)
+
             history.push('/home')
         } catch (error) {
             setLoaing(false)

@@ -1,10 +1,16 @@
 import { IAcition } from '../index'
 
-export interface IUser {
-    name?: string
-    avatar?: string
-    location?: string
-}
+export type IUser = Partial<{
+    id: string
+    username: string
+    nickname?: any
+    avatar: string
+    email?: any
+    openid?: any
+    role: string
+    createTime: string
+    updateTime: string
+}>
 
 export interface IUserInfo {
     userInfo: IUser
@@ -14,9 +20,8 @@ export interface IUserInfo {
 const defaultUserInfo = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo') as string)
     : {
-          name: '',
-          avatar: '',
-          location: ''
+          username: '',
+          avatar: ''
       }
 
 const initialState: IUserInfo = {
