@@ -3,6 +3,7 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from '@arco-design/web-react'
 import settings from '@/settings.json'
+import { history } from '@/route'
 import fetchErrorStatus from '@/utils/fetchErrorStatus'
 import { ContentTypeEnum, RequestEnum, ResultCodeEnum } from '@/enums/requsetEnums'
 
@@ -67,10 +68,13 @@ class NewAxios {
             },
             error => {
                 nprogress.done()
-                const status = error.response.status
+                const { data, status } = error.response
                 const msg = fetchErrorStatus(status)
-                Message.error(msg || '请求错误')
-                return Promise.reject(msg)
+
+                if (data.code === ResultCodeEnum.UNAUTHORIZED) {
+                    history.replace('/login')
+                }
+                return Promise.reject(data.message || msg)
             }
         )
     }

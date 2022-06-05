@@ -17,7 +17,7 @@ import styles from './style/layout.module.less'
 import { setPageTitle } from '@/utils/set-page-title'
 import { ThemeEnum } from '@/enums/globalEnums'
 //  vite 动态引入 需要维护一个 动态表
-const modules = import.meta.glob('../pages/*/index.tsx')
+const modules = import.meta.glob('../pages/**/[a-z[]*.tsx')
 
 console.log('modules :>> ', modules)
 
@@ -39,7 +39,7 @@ function getFlattenRoutes() {
     const recursion = (_routes: IRoutes[]) => {
         _routes.forEach((route: IRoutes) => {
             if (route.componentKey) {
-                route.component = lazy(modules[`../pages/${route.componentKey}/index.tsx`] as any)
+                route.component = lazy(modules[`../pages/${route.componentKey}.tsx`] as any)
                 newRoutes.push(route)
             } else if (isArray(route.children) && (route.children as IRoutes[]).length) {
                 recursion(route.children as IRoutes[])
@@ -63,6 +63,9 @@ function renderRoutes(t: any) {
 
     function recursion(_routes: IRoutes[], level: number) {
         return _routes.map(route => {
+            if (route.ignore) {
+                return ''
+            }
             // 路由内容Dom
             const contentDom = (
                 <>
@@ -153,9 +156,10 @@ function PageLayout() {
     const currentComponent = qs.parseUrl(pathname).url.slice(1)
     const defaultSelectedKeys = [currentComponent || defaultRoute]
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
-    const currRoute = getCurrRoute(defaultSelectedKeys[0])
-    const pageTitle = t[currRoute!.name] || currRoute!.name
-    setPageTitle(pageTitle)
+    // const currRoute = getCurrRoute(defaultSelectedKeys[0])
+    // console.log('🤪currRoute  >>:', currRoute)
+    // const pageTitle = t[currRoute!.name] || currRoute!.name
+    // setPageTitle(pageTitle)
 
     // 解决 点击返回 前进 刷新 侧边栏不变问题
     useEffect(() => {

@@ -25,5 +25,6 @@ export enum ContentTypeEnum {
  */
 export enum ResultCodeEnum {
     SUCCESS = 0,
-    ERROR = -1
+    ERROR = -1,
+    UNAUTHORIZED = -2
 }

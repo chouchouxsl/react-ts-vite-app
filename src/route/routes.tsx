@@ -9,6 +9,10 @@ export interface IRoutes {
     exact?: boolean
     icon?: any
     component?: any
+    // 当前页是否展示面包屑
+    breadcrumb?: boolean
+    // 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。
+    ignore?: boolean
     children?: IRoutes[]
 }
 
@@ -21,20 +25,27 @@ export const routes: IRoutes[] = [
         name: 'menu.home',
         exact: true,
         icon: <IconGift />,
-        componentKey: 'Home'
+        componentKey: 'Home/index'
     },
     {
         path: '/list',
         key: 'list',
-        name: 'menu.list',
         exact: false,
+        name: 'menu.list',
         icon: <IconSelectAll />,
         children: [
             {
-                path: '/list/page1',
-                key: 'list/page1',
-                name: 'list1',
-                componentKey: 'List'
+                path: '/list/index',
+                key: 'list/index',
+                name: 'actor.list',
+                componentKey: 'List/index'
+            },
+            {
+                path: '/list/detail/:id',
+                key: 'list/detail',
+                name: 'actor.detail',
+                componentKey: 'List/detail',
+                ignore: true
             }
         ]
     }

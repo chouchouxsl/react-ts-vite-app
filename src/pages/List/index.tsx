@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { IconDelete, IconEye } from '@arco-design/web-react/icon'
+import { Avatar, List } from '@arco-design/web-react'
 import { getListApi, addListApi } from '@/api'
 import style from './style/index.module.less'
+import { history } from '@/route'
 
-const List: React.FC = () => {
+const AList: React.FC = () => {
     const [list, setList] = useState<any[]>([])
 
     useEffect(() => {
@@ -16,27 +19,44 @@ const List: React.FC = () => {
     }
 
     return (
-        <div className={style.pages}>
-            {list?.map(x => (
-                <div key={x.id}>
-                    <div className={style.name}>{x.name}</div>
-                    <img src={x.avatar} className={style.avatar} alt="" />
-                    <ul className={style.warp}>
-                        {x.works.map((item: any) => (
-                            <li
-                                key={item.id}
-                                className={style.item}
-                                onClick={() => window.open(`http://javdb.com${item.href}`)}
+        <div className="warp" style={{ padding: '20px' }}>
+            <List
+                className="list-demo-actions"
+                style={{ width: '100%' }}
+                dataSource={list}
+                hoverable
+                render={(item, index) => (
+                    <List.Item
+                        key={item.id}
+                        actions={[
+                            <span
+                                className="list-demo-actions-icon"
+                                onClick={() =>
+                                    history.push({
+                                        pathname: `/list/detail/${item.id}`
+                                    })
+                                }
                             >
-                                <div>{item.title}</div>
-                                <img src={item.cover} alt="" />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+                                <IconEye />
+                            </span>,
+                            <span className="list-demo-actions-icon">
+                                <IconDelete />
+                            </span>
+                        ]}
+                    >
+                        <List.Item.Meta
+                            avatar={
+                                <Avatar shape="square">
+                                    <img alt="avatar" src={item.avatar} />
+                                </Avatar>
+                            }
+                            title={item.name}
+                        />
+                    </List.Item>
+                )}
+            />
         </div>
     )
 }
 
-export default List
+export default AList
