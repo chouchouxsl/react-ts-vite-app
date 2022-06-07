@@ -8,6 +8,7 @@ import { loginApi } from '@/api/login'
 import { IUser } from '@/redux/reducers/userInfo'
 import { history } from '@/route'
 import { getUserInfoApi } from '@/api/user'
+import { setPageTitle } from '@/utils/set-page-title'
 
 const loginForm: FC = () => {
     const formRef = useRef<FormInstance>(null)
@@ -15,6 +16,8 @@ const loginForm: FC = () => {
     const dispatch = useDispatch()
 
     const t = useLocale()
+
+    setPageTitle(t['login.login'])
 
     const onSubmit = async () => {
         try {

@@ -1,8 +1,8 @@
-import React, { useMemo, useState, lazy, useEffect } from 'react'
+import React, { useMemo, useState, lazy, useEffect, useRef } from 'react'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Layout, Menu } from '@arco-design/web-react'
-import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
+import { IconDashboard, IconList, IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
 import qs from 'query-string'
 import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
@@ -30,6 +30,22 @@ const MenuItem = Menu.Item
 const SubMenu = Menu.SubMenu
 
 /**
+ * @description: 根据路由的key获取icon
+ * @param {*} key
+ * @return {*} element
+ */
+function getIconFromKey(key: string) {
+    switch (key) {
+        case 'home':
+            return <IconDashboard className={styles.icon} />
+        case 'list':
+            return <IconList className={styles.icon} />
+        default:
+            return <div className={styles['icon-empty']} />
+    }
+}
+
+/**
  * @description: 路由表格式化
  * @return {*}  newRoutes 格式化后的路由
  */
@@ -53,73 +69,12 @@ function getFlattenRoutes() {
 }
 
 /**
- * @description: 根据路由表 生成侧边栏
- * @param {any} local // 国际化
- * @return {any[]} //sideNodes
- */
-function renderRoutes(t: any) {
-    console.log('renderRoutes :>> ', t)
-    const sideNodes: any[] = []
-
-    function recursion(_routes: IRoutes[], level: number) {
-        return _routes.map(route => {
-            if (route.ignore) {
-                return ''
-            }
-            // 路由内容Dom
-            const contentDom = (
-                <>
-                    {route.icon} {t[route.name] || route.name}
-                </>
-            )
-
-            // 判断是不是没有children的菜单 直接使用MenuItem组件
-            if (!isArray(route.children) || (isArray(route.children) && !route.children?.length)) {
-                // 不是一级菜单的 直接返回
-                if (level > 1) {
-                    return <MenuItem key={route.key}> {contentDom}</MenuItem>
-                }
-                // 如果是第一级 push到容器里
-                sideNodes.push(
-                    <MenuItem key={route.key}>
-                        <Link to={route.path}>{contentDom}</Link>
-                    </MenuItem>
-                )
-            }
-
-            // 如果存在childrem 需要使用SubMenu组件包裹
-            if (isArray(route.children) && route.children?.length) {
-                // 不是一级菜单的 直接返回
-                if (level > 1) {
-                    return (
-                        <SubMenu key={route.key} title={contentDom}>
-                            {recursion(route.children, level + 1)}
-                        </SubMenu>
-                    )
-                }
-                // 如果是第一级 push到容器里
-                sideNodes.push(
-                    <SubMenu key={route.key} title={contentDom}>
-                        {recursion(route.children, level + 1)}
-                    </SubMenu>
-                )
-            }
-        })
-    }
-
-    recursion(routes, 1)
-
-    return sideNodes
-}
-
-/**
  * @description: layout页面
  * @return {*} layout页面完整布局
  */
 function PageLayout() {
     // 国际化
     const t = useLocale()
-
     // 格式化路由 使用useMemo进行缓存 只会调用一次getFlattenRoutes
     const flattenRoutes = useMemo(() => getFlattenRoutes(), [])
     // 侧边栏按钮 是否伸缩collapsed
@@ -156,10 +111,19 @@ function PageLayout() {
     const currentComponent = qs.parseUrl(pathname).url.slice(1)
     const defaultSelectedKeys = [currentComponent || defaultRoute]
     const [selectedKeys, setSelectedKeys] = useState<string[]>(defaultSelectedKeys)
-    // const currRoute = getCurrRoute(defaultSelectedKeys[0])
-    // console.log('🤪currRoute  >>:', currRoute)
-    // const pageTitle = t[currRoute!.name] || currRoute!.name
-    // setPageTitle(pageTitle)
+    const currRoute = getCurrRoute(defaultSelectedKeys[0])
+    currRoute && setPageTitle(t[currRoute.name] || currRoute.name)
+
+    /* 
+      路由map表 处理面包屑
+     */
+    const [breadcrumb, setBreadCrumb] = useState<IRoutes[]>([])
+    const routeMap = useRef<Map<string, IRoutes[]>>(new Map())
+    console.log('🤪 routeMap >>:', routeMap, pathname)
+
+    useEffect(() => {
+        setBreadCrumb((routeMap.current.get(pathname) as IRoutes[]) || [])
+    }, [pathname])
 
     // 解决 点击返回 前进 刷新 侧边栏不变问题
     useEffect(() => {
@@ -176,6 +140,71 @@ function PageLayout() {
         const pageTitle = t[currRoute!.name] || currRoute!.name
         setPageTitle(pageTitle)
         history.replace(currRoute?.path ? currRoute.path : `/${key}`)
+    }
+
+    /**
+     * @description: 根据路由表 生成侧边栏
+     * @param {string[]} t // 国际化
+     * @return {any[]} //sideNodes
+     */
+    function renderRoutes(t: string[]) {
+        routeMap.current.clear()
+
+        const sideNodes: any[] = []
+
+        function recursion(_routes: IRoutes[], level = 1, parentRoute: IRoutes[] = []) {
+            return _routes.map(route => {
+                const { breadcrumb = true, hidden } = route
+
+                if (hidden) {
+                    return ''
+                }
+                // 路由内容Dom
+                const contentDom = (
+                    <>
+                        {getIconFromKey(route.key)} {t[route.name] || route.name}
+                    </>
+                )
+
+                routeMap.current.set(route.path, breadcrumb ? [...parentRoute, route] : [])
+
+                // 判断是不是没有children的菜单 直接使用MenuItem组件
+                if (!isArray(route.children) || (isArray(route.children) && !route.children?.length)) {
+                    // 不是一级菜单的 直接返回
+                    if (level > 1) {
+                        return <MenuItem key={route.key}> {contentDom}</MenuItem>
+                    }
+                    // 如果是第一级 push到容器里
+                    sideNodes.push(
+                        <MenuItem key={route.key}>
+                            <Link to={route.path}>{contentDom}</Link>
+                        </MenuItem>
+                    )
+                }
+
+                // 如果存在childrem 需要使用SubMenu组件包裹
+                if (isArray(route.children) && route.children?.length) {
+                    // 不是一级菜单的 直接返回
+                    if (level > 1) {
+                        return (
+                            <SubMenu key={route.key} title={contentDom}>
+                                {recursion(route.children, level + 1, [...parentRoute, route])}
+                            </SubMenu>
+                        )
+                    }
+                    // 如果是第一级 push到容器里
+                    sideNodes.push(
+                        <SubMenu key={route.key} title={contentDom}>
+                            {recursion(route.children, level + 1, [...parentRoute, route])}
+                        </SubMenu>
+                    )
+                }
+            })
+        }
+
+        recursion(routes)
+
+        return sideNodes
     }
 
     return (
@@ -210,9 +239,11 @@ function PageLayout() {
                 )}
                 <Layout className={styles.layoutContent} style={paddingStyle}>
                     <Content>
-                        <div className={styles.layoutBreadcrumbWap}>
-                            <Breadcrumb />
-                        </div>
+                        {breadcrumb.length > 0 && (
+                            <div className={styles.layoutBreadcrumbWap}>
+                                <Breadcrumb breadcrumb={breadcrumb} />
+                            </div>
+                        )}
                         <Switch>
                             {flattenRoutes.map(route => {
                                 return <Route key={route.key} path={`${route.path}`} component={route.component} />

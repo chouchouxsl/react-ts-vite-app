@@ -8,6 +8,7 @@ import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
 import { ThemeEnum } from '@/enums/globalEnums'
 import { GlobalContext } from '@/context/globalContext'
+import { setPageTitle } from '@/utils/set-page-title'
 
 interface INavBar {
     className: string

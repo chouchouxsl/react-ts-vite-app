@@ -1,20 +1,18 @@
-import { IconGift, IconSelectAll } from '@arco-design/web-react/icon'
+import auth, { AuthParams } from '@/utils/authentication'
 
-export interface IRoutes {
+export type IRoutes = {
     path: string
     key: string
     name: string
-    componentKey?: string
     redirect?: string
-    exact?: boolean
-    icon?: any
+    componentKey?: string
     component?: any
     // 当前页是否展示面包屑
     breadcrumb?: boolean
     // 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。
-    ignore?: boolean
+    hidden?: boolean
     children?: IRoutes[]
-}
+} & AuthParams
 
 export const defaultRoute = 'home'
 
@@ -23,29 +21,28 @@ export const routes: IRoutes[] = [
         path: '/home',
         key: 'home',
         name: 'menu.home',
-        exact: true,
-        icon: <IconGift />,
-        componentKey: 'Home/index'
+        componentKey: 'Home/index',
+        breadcrumb: false
     },
     {
         path: '/list',
         key: 'list',
-        exact: false,
         name: 'menu.list',
-        icon: <IconSelectAll />,
+        redirect: '/list/index',
         children: [
             {
                 path: '/list/index',
                 key: 'list/index',
-                name: 'actor.list',
+                name: 'list.index',
                 componentKey: 'List/index'
             },
             {
                 path: '/list/detail/:id',
                 key: 'list/detail',
-                name: 'actor.detail',
+                name: 'list.detail',
                 componentKey: 'List/detail',
-                ignore: true
+                breadcrumb: false,
+                hidden: true
             }
         ]
     }

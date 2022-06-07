@@ -1,4 +1,4 @@
 export default {
-    'actor.list': 'ActorList',
-    'actor.detail': 'ActorDetail'
+    'list.index': 'ActorList',
+    'list.detail': 'ActorDetail'
 }

@@ -1,4 +1,4 @@
 export default {
-    'actor.list': '演员列表',
-    'actor.detail': '演员详情'
+    'list.index': '演员列表',
+    'list.detail': '演员详情'
 }
