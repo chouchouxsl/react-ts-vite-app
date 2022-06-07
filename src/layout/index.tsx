@@ -6,7 +6,7 @@ import { IconDashboard, IconList, IconMenuFold, IconMenuUnfold } from '@arco-des
 import qs from 'query-string'
 import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
-import { routes, IRoutes, defaultRoute, history } from '@/route'
+import { IRoutes, useRoutes, history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -15,11 +15,7 @@ import darkTheme from '@/utils/systemTheme'
 // 样式
 import styles from './style/layout.module.less'
 import { setPageTitle } from '@/utils/set-page-title'
-import { ThemeEnum } from '@/enums/globalEnums'
-//  vite 动态引入 需要维护一个 动态表
-const modules = import.meta.glob('../pages/**/[a-z[]*.tsx')
-
-console.log('modules :>> ', modules)
+import { Roles, ThemeEnum } from '@/enums/globalEnums'
 
 // 布局组件
 const Sider = Layout.Sider
@@ -49,7 +45,10 @@ function getIconFromKey(key: string) {
  * @description: 路由表格式化
  * @return {*}  newRoutes 格式化后的路由
  */
-function getFlattenRoutes() {
+function getFlattenRoutes(routes: IRoutes[]) {
+    //  vite 动态引入 需要维护一个 动态表
+    const modules = import.meta.glob('../pages/**/[a-z[]*.tsx')
+    console.log('modules :>> ', modules)
     const newRoutes: IRoutes[] = []
 
     const recursion = (_routes: IRoutes[]) => {
@@ -73,10 +72,13 @@ function getFlattenRoutes() {
  * @return {*} layout页面完整布局
  */
 function PageLayout() {
+    const role = useSelector((state: ReducerState) => state.userInfo.userInfo.role)
+    console.log('🤪 role >>:', role)
+    const [routes, defaultRoute] = useRoutes(role as Roles)
     // 国际化
     const t = useLocale()
     // 格式化路由 使用useMemo进行缓存 只会调用一次getFlattenRoutes
-    const flattenRoutes = useMemo(() => getFlattenRoutes(), [])
+    const flattenRoutes = useMemo(() => getFlattenRoutes(routes), [])
     // 侧边栏按钮 是否伸缩collapsed
     const [collapsed, setCollapsed] = useState<boolean>(false)
     // 切换侧边栏

@@ -13,3 +13,12 @@ export enum LocaleEnum {
     zhCN = 'zh-CN',
     enUS = 'en-US'
 }
+
+/**
+ * @description: Roles
+ */
+export enum Roles {
+    ADMIN = 'admin',
+    MEMBER = 'member',
+    GUEST = 'guest'
+}
