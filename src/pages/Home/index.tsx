@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import style from './style/index.module.less'
 import SvgIcon from '@/components/SvgIcon'
+import AuthWarp from '@/components/AuthWarp'
 
 class Home extends Component {
     componentDidMount() {}
@@ -12,7 +13,10 @@ class Home extends Component {
     render() {
         return (
             <div className={style.pages}>
-                <SvgIcon name="dark" color="red" /> 首页
+                <AuthWarp>
+                    <SvgIcon name="dark" color="red" />
+                </AuthWarp>
+                首页
             </div>
         )
     }
