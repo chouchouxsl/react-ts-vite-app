@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense, useMemo } from 'react'
 import ReactDOM from 'react-dom'
+import 'virtual:svg-icons-register'
 import './style/index.less'
 import { Provider } from 'react-redux'
 import { Router, Switch, Route } from 'react-router-dom'

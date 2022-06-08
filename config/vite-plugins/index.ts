@@ -4,6 +4,7 @@ import createHtml from './html'
 import createStyleImport from './styleImport'
 import createEslintPlugin from './eslint'
 import createMockServe from './mock'
+import createSvgIcons from './svg'
 import { ViteEnv } from '../../src/typings/config'
 
 export default function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
@@ -12,7 +13,8 @@ export default function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean) {
         createHtml(viteEnv, isBuild),
         createMockServe(viteEnv, isBuild),
         createStyleImport(),
-        createEslintPlugin()
+        createEslintPlugin(),
+        createSvgIcons()
     ]
 
     return vitePlugins
