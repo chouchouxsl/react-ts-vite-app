@@ -3,12 +3,13 @@ import { useSelector } from 'react-redux'
 import { ReducerState } from '@/redux'
 import { Roles } from '@/enums/globalEnums'
 
-const AuthWarp: React.FC = props => {
+// `${Roles}`
+const AuthWarp: React.FC<{ roles?: Roles[] }> = props => {
     const role = useSelector((state: ReducerState) => state.userInfo.userInfo.role)
 
-    const { children } = props
+    const { children, roles = [Roles.ADMIN] } = props
 
-    return role === Roles.ADMIN ? <>{children}</> : null
+    return roles.includes(role as Roles) ? <>{children}</> : null
 }
 
 export default AuthWarp
