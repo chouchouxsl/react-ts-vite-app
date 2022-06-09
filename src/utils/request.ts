@@ -72,6 +72,7 @@ class NewAxios {
                 const msg = fetchErrorStatus(status)
 
                 if (data.code === ResultCodeEnum.UNAUTHORIZED) {
+                    localStorage.removeItem('token')
                     history.replace({ pathname: '/login', state: { redirect: history.location?.pathname || '/' } })
                 }
                 return Promise.reject(data.message || msg)
