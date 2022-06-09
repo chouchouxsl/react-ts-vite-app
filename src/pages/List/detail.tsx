@@ -1,11 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useRouteMatch } from 'react-router-dom'
+import { Card } from '@arco-design/web-react'
 import { getListApi, addListApi } from '@/api'
-import style from './style/index.module.less'
+import './style/detail.module.less'
 import { history } from '@/route'
 
+const Meta = Card.Meta
+
 const AListDetail: React.FC = () => {
-    const [list, setList] = useState<any[]>([])
+    console.log('🤪 useRouteMatch >>:', useRouteMatch())
+
+    const [list, setList] = useState<any[]>([
+        {
+            title: 'asdkadnaskdnajk',
+            cover: 'https://raw.githubusercontent.com/chouchouxsl/photos/master/wallhaven-z8pyky.jpg'
+        },
+        {
+            title: 'asdkadnaskdnajk',
+            cover: 'https://raw.githubusercontent.com/chouchouxsl/photos/master/wallhaven-z8pyky.jpg'
+        },
+        {
+            title: 'asdkadnaskdnajk',
+            cover: 'https://raw.githubusercontent.com/chouchouxsl/photos/master/wallhaven-z8pyky.jpg'
+        },
+        {
+            title: 'asdkadnaskdnajk',
+            cover: 'https://raw.githubusercontent.com/chouchouxsl/photos/master/wallhaven-z8pyky.jpg'
+        }
+    ])
     const params = useParams()
 
     console.log('🤪params  >>:', params)
@@ -16,12 +38,33 @@ const AListDetail: React.FC = () => {
     async function getList() {
         const res = await getListApi<{ id?: number }>({})
         console.log('res :>> ', res)
-        setList(res)
+        // setList(res)
     }
 
     return (
-        <div className="warp" style={{ padding: '20px' }}>
-            11
+        <div className="app-warp">
+            {list.map((item, index) => (
+                <Card
+                    key={index}
+                    hoverable
+                    cover={
+                        <div
+                            style={{
+                                height: 204,
+                                overflow: 'hidden'
+                            }}
+                        >
+                            <img
+                                style={{ width: '100%', transform: 'translateY(-20px)' }}
+                                alt="dessert"
+                                src={item.cover}
+                            />
+                        </div>
+                    }
+                >
+                    <Meta title={item.title} />
+                </Card>
+            ))}
         </div>
     )
 }
