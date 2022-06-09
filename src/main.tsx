@@ -7,12 +7,11 @@ import { Router, Switch, Route } from 'react-router-dom'
 import { ConfigProvider, Spin } from '@arco-design/web-react'
 import zhCN from '@arco-design/web-react/es/locale/zh-CN'
 import enUS from '@arco-design/web-react/es/locale/en-US'
-import { history } from '@/route'
+import { history, AuthRoute } from '@/route'
 import store from '@/redux'
 import PageLayout from '@/layout'
 import { GlobalContext } from '@/context/globalContext'
 import Login from './pages/Login'
-import checkLogin from './utils/checkLogin'
 import useStorage from './hooks/useStorage'
 import changeTheme from './utils/changeTheme'
 import { LocaleEnum, ThemeEnum } from './enums/globalEnums'
@@ -40,12 +39,6 @@ const Index: React.FC = () => {
         changeTheme(theme)
     }, [theme])
 
-    useEffect(() => {
-        if (!checkLogin()) {
-            history.push('/login')
-        }
-    }, [])
-
     return (
         <Router history={history}>
             <Suspense
@@ -68,7 +61,7 @@ const Index: React.FC = () => {
                         <GlobalContext.Provider value={contextValue}>
                             <Switch>
                                 <Route path="/login" component={Login} />
-                                <Route path="/" component={PageLayout} />
+                                <AuthRoute path="/" component={PageLayout} />
                             </Switch>
                         </GlobalContext.Provider>
                     </Provider>

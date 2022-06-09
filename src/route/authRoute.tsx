@@ -1,28 +1,15 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, RouteProps } from 'react-router-dom'
+import checkLogin from '@/utils/checkLogin'
 
-// 使用时: <AuthRoute path="" component={...} />
-
-const AuthRoute = ({ component: Component, ...rest }) => {
-    // 标签传入的参数compoennt，并重命名Component
-    return (
-        <Route
-            {...rest}
-            render={props =>
-                // 判断是否登录  在登录页面登录成功的时候把用户名保存到本地
-                localStorage.getItem('isLogin') ? (
-                    <Component {...props} />
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: '/logins', // 重定向到的网页位置
-                            state: { from: props.location }
-                        }}
-                    />
-                )
-            }
-        />
-    )
+const AuthRoute: React.FC<RouteProps> = props => {
+    const { path, component, location } = props
+    console.log('🤪 path >>:', props, path, location?.pathname)
+    /* 在这里可以写一些基于路由守卫的代码 */
+    if (!checkLogin()) {
+        return <Redirect to={{ pathname: '/login', state: { redirect: location?.pathname || '/' } }} />
+    }
+    return <Route component={component} path={path} />
 }
 
 export default AuthRoute
