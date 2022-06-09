@@ -5,6 +5,21 @@
     grid-gap: 15px 20px;
 
     :global(.arco-card) {
-        cursor: pointer;
+        :global(.arco-card-cover) {
+            img {
+                width: 100%;
+                transition: all 0.3s;
+                object-fit: cover;
+            }
+        }
+
+        &:hover {
+            :global(.arco-card-cover) {
+                img {
+                    filter: brightness(0.8);
+                    transform: scale(1.1);
+                }
+            }
+        }
     }
 }

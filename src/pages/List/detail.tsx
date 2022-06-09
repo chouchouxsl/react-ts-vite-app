@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useRouteMatch } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { Card } from '@arco-design/web-react'
-import { getListApi, addListApi } from '@/api'
+import { IconFindReplace } from '@arco-design/web-react/icon'
+import { getListByIdApi } from '@/api'
 import './style/detail.module.less'
-import { history } from '@/route'
 
 const Meta = Card.Meta
 
+interface RequestParams {
+    id: string
+}
+
 const AListDetail: React.FC = () => {
-    console.log('🤪 useRouteMatch >>:', useRouteMatch())
+    const params = useParams<RequestParams>()
 
     const [list, setList] = useState<any[]>([
         {
@@ -28,15 +32,13 @@ const AListDetail: React.FC = () => {
             cover: 'https://raw.githubusercontent.com/chouchouxsl/photos/master/wallhaven-z8pyky.jpg'
         }
     ])
-    const params = useParams()
 
-    console.log('🤪params  >>:', params)
     useEffect(() => {
         getList()
     }, [])
 
     async function getList() {
-        const res = await getListApi<{ id?: number }>({})
+        const res = await getListByIdApi<RequestParams>({ id: params?.id })
         console.log('res :>> ', res)
         // setList(res)
     }
@@ -46,21 +48,12 @@ const AListDetail: React.FC = () => {
             {list.map((item, index) => (
                 <Card
                     key={index}
-                    hoverable
-                    cover={
-                        <div
-                            style={{
-                                height: 204,
-                                overflow: 'hidden'
-                            }}
-                        >
-                            <img
-                                style={{ width: '100%', transform: 'translateY(-20px)' }}
-                                alt="dessert"
-                                src={item.cover}
-                            />
-                        </div>
-                    }
+                    cover={<img src={item.cover} />}
+                    actions={[
+                        <span className="icon-hover">
+                            <IconFindReplace />
+                        </span>
+                    ]}
                 >
                     <Meta title={item.title} />
                 </Card>

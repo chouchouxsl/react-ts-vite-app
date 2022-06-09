@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
 import { Avatar, List } from '@arco-design/web-react'
-import { getListApi, addListApi } from '@/api'
+import { getListAllApi } from '@/api'
 import style from './style/index.module.less'
 import { history } from '@/route'
 
@@ -9,13 +9,13 @@ const AList: React.FC = () => {
     const [list, setList] = useState<any[]>([])
 
     useEffect(() => {
-        // getList()
+        getList()
     }, [])
 
     async function getList() {
-        const res = await getListApi<{ id?: number }>({})
+        const res = await getListAllApi()
         console.log('res :>> ', res)
-        setList(res)
+        // setList(res)
     }
 
     return (
