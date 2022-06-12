@@ -73,7 +73,6 @@ function getFlattenRoutes(routes: IRoutes[]) {
  */
 function PageLayout() {
     const role = useSelector((state: ReducerState) => state.userInfo.userInfo.role)
-    console.log('🤪 role >>:', role)
     const [routes, defaultRoute] = useRoutes(role as Roles)
     // 国际化
     const t = useLocale()
@@ -121,9 +120,14 @@ function PageLayout() {
      */
     const [breadcrumb, setBreadCrumb] = useState<IRoutes[]>([])
     const routeMap = useRef<Map<string, IRoutes[]>>(new Map())
-    console.log('🤪 routeMap >>:', routeMap, pathname)
+    // console.log('🤪 routeMap >>:', routeMap, history, pathname)
 
     useEffect(() => {
+        // for (let key of routeMap.current.keys()) {
+        //     key = key.split(':')[0]
+        //     console.log('🤪 iterator >>:', key, pathname)
+        //     console.log('🤪 pathname.includes(key) >>:', pathname.includes(key))
+        // }
         setBreadCrumb((routeMap.current.get(pathname) as IRoutes[]) || [])
     }, [pathname])
 
@@ -157,7 +161,9 @@ function PageLayout() {
         function recursion(_routes: IRoutes[], level = 1, parentRoute: IRoutes[] = []) {
             return _routes.map(route => {
                 const { breadcrumb = true, hidden } = route
-
+                /* 将路由存取成一个映射关系 */
+                routeMap.current.set(route.path, breadcrumb ? [...parentRoute, route] : [])
+                /* 设置hidden的 不生成菜单 */
                 if (hidden) {
                     return ''
                 }
@@ -167,8 +173,6 @@ function PageLayout() {
                         {getIconFromKey(route.key)} {t[route.name] || route.name}
                     </>
                 )
-
-                routeMap.current.set(route.path, breadcrumb ? [...parentRoute, route] : [])
 
                 // 判断是不是没有children的菜单 直接使用MenuItem组件
                 if (!isArray(route.children) || (isArray(route.children) && !route.children?.length)) {

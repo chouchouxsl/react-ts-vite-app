@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
-import { Avatar, List } from '@arco-design/web-react'
-import { getListAllApi } from '@/api'
+import { Avatar, List, Message, Popconfirm } from '@arco-design/web-react'
+import { getListAllApi, deleteActorItem } from '@/api'
 import style from './style/index.module.less'
 import { history } from '@/route'
+import useLocale from '@/hooks/useLocale'
 
 const AList: React.FC = () => {
+    const t = useLocale()
+
     const [list, setList] = useState<any[]>([])
 
     useEffect(() => {
@@ -15,7 +18,14 @@ const AList: React.FC = () => {
     async function getList() {
         const res = await getListAllApi()
         console.log('res :>> ', res)
-        // setList(res)
+        setList(res)
+    }
+
+    const deleteItem = async (id: number) => {
+        const res = await deleteActorItem({ id })
+        console.log('🤪 res >>:', res)
+        Message.success('删除成功')
+        getList()
     }
 
     return (
@@ -40,7 +50,14 @@ const AList: React.FC = () => {
                                 <IconEye />
                             </span>,
                             <span className="list-demo-actions-icon">
-                                <IconDelete />
+                                <Popconfirm
+                                    title={t['list.delete.tips']}
+                                    onOk={() => {
+                                        deleteItem(item.id)
+                                    }}
+                                >
+                                    <IconDelete />
+                                </Popconfirm>
                             </span>
                         ]}
                     >

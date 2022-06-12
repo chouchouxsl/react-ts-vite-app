@@ -43,7 +43,7 @@ export const routes: IRoutes[] = [
                 key: 'list/detail',
                 name: 'list.detail',
                 componentKey: 'List/detail',
-                breadcrumb: false,
+                breadcrumb: true,
                 hidden: true
             }
         ]

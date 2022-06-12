@@ -4,4 +4,6 @@ export const getListAllApi = <T = any>(params?: T) => getFetch({ url: '/javdb/li
 
 export const getListByIdApi = <T = any>(params?: T) => getFetch({ url: '/javdb/list', params })
 
-export const addListApi = <T = any>(data?: T) => postFetch({ url: '/javdb/add-list', data })
+export const getWorksByIdApi = <T = any>(params?: T) => getFetch({ url: '/javdb/list/works', params })
+
+export const deleteActorItem = <T = any>(data?: T) => postFetch({ url: '/javdb/list/delete', data })
