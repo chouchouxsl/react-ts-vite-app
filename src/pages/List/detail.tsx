@@ -77,9 +77,7 @@ const AListDetail: React.FC = () => {
         <div className="app-warp">
             <div className={style.header}>
                 <div className={style.left}>
-                    <Avatar triggerType="mask" size={108}>
-                        <img alt="avatar" src={info.avatar} />
-                    </Avatar>
+                    <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
                     <div className={style.title}>{info.name} </div>
                 </div>
 
@@ -110,7 +108,7 @@ const AListDetail: React.FC = () => {
                     <Card
                         hoverable
                         key={index}
-                        cover={<LazyImg src={item.cover} />}
+                        cover={<LazyImg preview src={item.cover} />}
                         actions={[
                             <span
                                 className="icon-hover"

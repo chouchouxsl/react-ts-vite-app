@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
-import { Avatar, List, Message, Popconfirm } from '@arco-design/web-react'
+import { List, Message, Popconfirm } from '@arco-design/web-react'
 import { getListAllApi, deleteActorItem } from '@/api'
 import style from './style/index.module.less'
 import { history } from '@/route'
 import useLocale from '@/hooks/useLocale'
+import LazyImg from '@/components/LazyImg'
 
 const AList: React.FC = () => {
     const t = useLocale()
@@ -39,34 +40,25 @@ const AList: React.FC = () => {
                     <List.Item
                         key={item.id}
                         actions={[
-                            <span
-                                className="list-demo-actions-icon"
+                            <IconEye
                                 onClick={() =>
                                     history.push({
                                         pathname: `/list/detail/${item.id}`
                                     })
                                 }
+                            />,
+                            <Popconfirm
+                                title={t['list.delete.tips']}
+                                onOk={() => {
+                                    deleteItem(item.id)
+                                }}
                             >
-                                <IconEye />
-                            </span>,
-                            <span className="list-demo-actions-icon">
-                                <Popconfirm
-                                    title={t['list.delete.tips']}
-                                    onOk={() => {
-                                        deleteItem(item.id)
-                                    }}
-                                >
-                                    <IconDelete />
-                                </Popconfirm>
-                            </span>
+                                <IconDelete />
+                            </Popconfirm>
                         ]}
                     >
                         <List.Item.Meta
-                            avatar={
-                                <Avatar shape="square">
-                                    <img alt="avatar" src={item.avatar} />
-                                </Avatar>
-                            }
+                            avatar={<LazyImg width={60} height={60} borderRadius={60} src={item.avatar} />}
                             title={item.name}
                         />
                     </List.Item>
