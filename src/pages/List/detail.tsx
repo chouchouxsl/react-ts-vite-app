@@ -9,6 +9,7 @@ import useLocale from '@/hooks/useLocale'
 import SvgIcon from '@/components/SvgIcon'
 import useUpdate from '@/hooks/useUpdate'
 import LazyImg from '@/components/LazyImg'
+import OperationHead from '@/components/OperationHead'
 
 const Meta = Card.Meta
 const InputSearch = Input.Search
@@ -75,13 +76,14 @@ const AListDetail: React.FC = () => {
 
     return (
         <div className="app-warp">
-            <div className={style.header}>
-                <div className={style.left}>
-                    <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
-                    <div className={style.title}>{info.name} </div>
-                </div>
-
-                <div className={style.right}>
+            <OperationHead
+                leftDOM={
+                    <div className={style['title-warp']}>
+                        <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
+                        <div className={style.title}>{info.name} </div>
+                    </div>
+                }
+                rightDOM={
                     <InputSearch
                         searchButton={<SvgIcon name="search" color="#fff" />}
                         loading={loading}
@@ -101,8 +103,8 @@ const AListDetail: React.FC = () => {
                             }
                         }}
                     />
-                </div>
-            </div>
+                }
+            />
             <div className={style.content}>
                 {list.map((item, index) => (
                     <Card
@@ -133,6 +135,7 @@ const AListDetail: React.FC = () => {
                 }}
             >
                 <Pagination
+                    hideOnSinglePage
                     showTotal
                     total={page.total}
                     pageSize={page.pageSize}

@@ -13,7 +13,7 @@ const AList: React.FC = () => {
     const [list, setList] = useState<any[]>([])
 
     useEffect(() => {
-        getList()
+        // getList()
     }, [])
 
     async function getList() {
