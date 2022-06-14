@@ -30,7 +30,7 @@ export const routes: IRoutes[] = [
         key: 'list',
         name: 'menu.list',
         redirect: '/list/index',
-        roles: [Roles.ADMIN],
+        roles: [Roles.ADMIN, Roles.MEMBER],
         children: [
             {
                 path: '/list/index',

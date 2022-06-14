@@ -9,6 +9,8 @@ import LazyImg from '@/components/LazyImg'
 import OperationHead from '@/components/OperationHead'
 import SvgIcon from '@/components/SvgIcon'
 import useUpdate from '@/hooks/useUpdate'
+import AuthWarp from '@/components/AuthWarp'
+import { Roles } from '@/enums/globalEnums'
 
 const AList: React.FC = () => {
     const t = useLocale()
@@ -79,9 +81,11 @@ const AList: React.FC = () => {
                         />
                     }
                     rightDOM={
-                        <Button type="primary" size="large" onClick={() => setShowDialog(true)}>
-                            {t['list.add-data']}
-                        </Button>
+                        <AuthWarp roles={[Roles.ADMIN]}>
+                            <Button type="primary" size="large" onClick={() => setShowDialog(true)}>
+                                {t['list.add-data']}
+                            </Button>
+                        </AuthWarp>
                     }
                 />
                 <List
