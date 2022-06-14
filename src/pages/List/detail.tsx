@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Avatar, Card, Input, Pagination, Image } from '@arco-design/web-react'
-import LazyLoad from 'react-lazyload'
-import { IconFindReplace, IconLoading } from '@arco-design/web-react/icon'
+import { Card, Input, Pagination, Image } from '@arco-design/web-react'
+import { IconFindReplace } from '@arco-design/web-react/icon'
 import { getListByIdApi, getWorksByIdApi } from '@/api'
 import style from './style/detail.module.less'
 import useLocale from '@/hooks/useLocale'
@@ -40,7 +39,7 @@ const AListDetail: React.FC = () => {
 
     const [loading, setLoading] = useState(false)
     const [title, setTitle] = useState('')
-    const [info, setInfo] = useState<any>({})
+    const [info, setInfo] = useState<any>(null)
     const [list, setList] = useState<any[]>([])
 
     const onSearch = (num = 1) => {
@@ -51,7 +50,7 @@ const AListDetail: React.FC = () => {
     }
 
     useEffect(() => {
-        getList()
+        // getList()
     }, [effect])
 
     async function getList() {
@@ -75,79 +74,81 @@ const AListDetail: React.FC = () => {
     }
 
     return (
-        <div className="app-warp">
-            <OperationHead
-                leftDOM={
-                    <div className={style['title-warp']}>
-                        <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
-                        <div className={style.title}>{info.name} </div>
-                    </div>
-                }
-                rightDOM={
-                    <InputSearch
-                        searchButton={<SvgIcon name="search" color="#fff" />}
-                        loading={loading}
-                        allowClear
-                        placeholder={t['list.detail.search']}
-                        style={{ width: 350, height: 40 }}
-                        value={title}
-                        onChange={val => setTitle(val)}
-                        onClear={() => {
-                            setTitle('')
-                            onSearch()
-                        }}
-                        onSearch={() => onSearch()}
-                        onPressEnter={e => {
-                            if (e.keyCode === 13) {
+        info && (
+            <div className="app-warp">
+                <OperationHead
+                    leftDOM={
+                        <div className={style['title-warp']}>
+                            <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
+                            <div className={style.title}>{info.name} </div>
+                        </div>
+                    }
+                    rightDOM={
+                        <InputSearch
+                            searchButton={<SvgIcon name="search" color="#fff" />}
+                            loading={loading}
+                            allowClear
+                            placeholder={t['list.detail.search']}
+                            style={{ width: 350, height: 40 }}
+                            value={title}
+                            onChange={val => setTitle(val)}
+                            onClear={() => {
+                                setTitle('')
                                 onSearch()
-                            }
+                            }}
+                            onSearch={() => onSearch()}
+                            onPressEnter={e => {
+                                if (e.keyCode === 13) {
+                                    onSearch()
+                                }
+                            }}
+                        />
+                    }
+                />
+                <div className={style.content}>
+                    {list.map((item, index) => (
+                        <Card
+                            hoverable
+                            key={index}
+                            cover={<LazyImg preview src={item.cover} />}
+                            actions={[
+                                <span
+                                    className="icon-hover"
+                                    onClick={() => window.open(`https://javdb39.com/${item.href}`)}
+                                >
+                                    <IconFindReplace />
+                                </span>
+                            ]}
+                        >
+                            <Meta title={item.title} />
+                        </Card>
+                    ))}
+                </div>
+                <div
+                    className="pagination"
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBlock: '20px'
+                    }}
+                >
+                    <Pagination
+                        hideOnSinglePage
+                        showTotal
+                        total={page.total}
+                        pageSize={page.pageSize}
+                        current={page.pageNum}
+                        showJumper
+                        onChange={(pageNumber: number) => {
+                            setPage(v => ({ ...v, pageNum: pageNumber }))
+                            onSearch(pageNumber)
                         }}
                     />
-                }
-            />
-            <div className={style.content}>
-                {list.map((item, index) => (
-                    <Card
-                        hoverable
-                        key={index}
-                        cover={<LazyImg preview src={item.cover} />}
-                        actions={[
-                            <span
-                                className="icon-hover"
-                                onClick={() => window.open(`https://javdb39.com/${item.href}`)}
-                            >
-                                <IconFindReplace />
-                            </span>
-                        ]}
-                    >
-                        <Meta title={item.title} />
-                    </Card>
-                ))}
+                </div>
             </div>
-            <div
-                className="pagination"
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBlock: '20px'
-                }}
-            >
-                <Pagination
-                    hideOnSinglePage
-                    showTotal
-                    total={page.total}
-                    pageSize={page.pageSize}
-                    current={page.pageNum}
-                    showJumper
-                    onChange={(pageNumber: number) => {
-                        setPage(v => ({ ...v, pageNum: pageNumber }))
-                        onSearch(pageNumber)
-                    }}
-                />
-            </div>
-        </div>
+        )
     )
 }
 
