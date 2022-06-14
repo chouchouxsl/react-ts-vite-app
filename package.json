@@ -27,7 +27,7 @@
     "style-check": "stylelint-config-prettier-check"
   },
   "dependencies": {
-    "@arco-design/web-react": "^2.27.1",
+    "@arco-design/web-react": "^2.35.0",
     "@types/react-redux": "^7.1.21",
     "@types/react-router-dom": "^5.3.2",
     "@types/redux": "^3.6.0",
