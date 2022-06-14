@@ -29,7 +29,7 @@ const AListDetail: React.FC = () => {
 
     const t = useLocale()
 
-    const [page, setPage] = useState({
+    const [page, setPage] = useState<IPageInfo>({
         pageNum: 1,
         pageSize: 8,
         total: 0

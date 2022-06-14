@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
-import { Button, Form, Input, List, Message, Modal, Popconfirm, Spin } from '@arco-design/web-react'
+import { Button, Form, Input, List, Message, Modal, Pagination, Popconfirm, Spin } from '@arco-design/web-react'
 import { getListAllApi, deleteActorItemApi, crawlingInfoApi } from '@/api'
 import style from './style/index.module.less'
 import { history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import LazyImg from '@/components/LazyImg'
 import OperationHead from '@/components/OperationHead'
+import SvgIcon from '@/components/SvgIcon'
+import useUpdate from '@/hooks/useUpdate'
 
 const AList: React.FC = () => {
     const t = useLocale()
     const [form] = Form.useForm()
     const [list, setList] = useState<any[]>([])
+    const [name, setName] = useState<string>('')
+    const [effect, triggerUpdate] = useUpdate()
     const [isShowLoading, setLoading] = useState(false)
     const [isShowDialog, setShowDialog] = useState(false)
+    const [page, setPage] = useState<IPageInfo>({
+        pageNum: 1,
+        pageSize: 8,
+        total: 0
+    })
+
+    const onSearch = (num = 1) => {
+        setPage(v => ({ ...v, pageNum: num }))
+        setList([])
+        window.scroll(0, 0)
+        triggerUpdate()
+    }
 
     useEffect(() => {
         // getList()
-        console.log('🤪 form >>:', form)
-    }, [])
+        console.log('🤪 name >>:', name)
+    }, [effect])
 
     async function getList() {
         const res = await getListAllApi()
@@ -42,6 +58,26 @@ const AList: React.FC = () => {
 
             <div className="warp" style={{ padding: '20px' }}>
                 <OperationHead
+                    leftDOM={
+                        <Input.Search
+                            searchButton={<SvgIcon name="search" color="#fff" />}
+                            allowClear
+                            placeholder={t['list.detail.search']}
+                            style={{ width: 350, height: 40 }}
+                            value={name}
+                            onChange={val => setName(val)}
+                            onClear={() => {
+                                setName('')
+                                onSearch()
+                            }}
+                            onSearch={() => onSearch()}
+                            onPressEnter={e => {
+                                if (e.keyCode === 13) {
+                                    onSearch()
+                                }
+                            }}
+                        />
+                    }
                     rightDOM={
                         <Button type="primary" size="large" onClick={() => setShowDialog(true)}>
                             {t['list.add-data']}
@@ -81,6 +117,29 @@ const AList: React.FC = () => {
                         </List.Item>
                     )}
                 />
+                <div
+                    className="pagination"
+                    style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginBlock: '20px'
+                    }}
+                >
+                    <Pagination
+                        hideOnSinglePage
+                        showTotal
+                        total={page.total}
+                        pageSize={page.pageSize}
+                        current={page.pageNum}
+                        showJumper
+                        onChange={(pageNumber: number) => {
+                            setPage(v => ({ ...v, pageNum: pageNumber }))
+                            onSearch(pageNumber)
+                        }}
+                    />
+                </div>
             </div>
 
             <Modal
@@ -104,7 +163,7 @@ const AList: React.FC = () => {
                         labelCol={{ span: 5 }}
                         field="link"
                         rules={[
-                            { required: true, message: t['list.dialog.lebal.networkLink.tips'] },
+                            { required: true, message: t['list.dialog.input.placeholder'] },
                             {
                                 match: /^(https|http):\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i,
                                 message: t['list.dialog.input.placeholder']
