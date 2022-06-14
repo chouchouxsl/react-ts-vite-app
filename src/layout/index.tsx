@@ -48,7 +48,6 @@ function getIconFromKey(key: string) {
 function getFlattenRoutes(routes: IRoutes[]) {
     //  vite 动态引入 需要维护一个 动态表
     const modules = import.meta.glob('../pages/**/[a-z[]*.tsx')
-    console.log('modules :>> ', modules)
     const newRoutes: IRoutes[] = []
 
     const recursion = (_routes: IRoutes[]) => {
@@ -120,14 +119,15 @@ function PageLayout() {
      */
     const [breadcrumb, setBreadCrumb] = useState<IRoutes[]>([])
     const routeMap = useRef<Map<string, IRoutes[]>>(new Map())
-    // console.log('🤪 routeMap >>:', routeMap, history, pathname)
 
     useEffect(() => {
-        // for (let key of routeMap.current.keys()) {
-        //     key = key.split(':')[0]
-        //     console.log('🤪 iterator >>:', key, pathname)
-        //     console.log('🤪 pathname.includes(key) >>:', pathname.includes(key))
-        // }
+        for (const [k, v] of routeMap.current.entries()) {
+            console.log('🤪 iterator >>:', k, v)
+            console.log('🤪 pathname.includes(k) >>:', pathname.includes(k))
+        }
+        console.log('🤪 routeMap >>:', routeMap.current)
+
+        console.log('🤪 pathname >>:', pathname)
         setBreadCrumb((routeMap.current.get(pathname) as IRoutes[]) || [])
     }, [pathname])
 
@@ -145,7 +145,7 @@ function PageLayout() {
         const currRoute = getCurrRoute(key)
         const pageTitle = t[currRoute!.name] || currRoute!.name
         setPageTitle(pageTitle)
-        history.replace(currRoute?.path ? currRoute.path : `/${key}`)
+        history.replace(currRoute?.key ? currRoute.key : `/${key}`)
     }
 
     /**
@@ -162,7 +162,7 @@ function PageLayout() {
             return _routes.map(route => {
                 const { breadcrumb = true, hidden } = route
                 /* 将路由存取成一个映射关系 */
-                routeMap.current.set(route.path, breadcrumb ? [...parentRoute, route] : [])
+                routeMap.current.set(route.key, breadcrumb ? [...parentRoute, route] : [])
                 /* 设置hidden的 不生成菜单 */
                 if (hidden) {
                     return ''
@@ -183,7 +183,7 @@ function PageLayout() {
                     // 如果是第一级 push到容器里
                     sideNodes.push(
                         <MenuItem key={route.key}>
-                            <Link to={route.path}>{contentDom}</Link>
+                            <Link to={`/${route.key}`}>{contentDom}</Link>
                         </MenuItem>
                     )
                 }
@@ -252,7 +252,13 @@ function PageLayout() {
                         )}
                         <Switch>
                             {flattenRoutes.map(route => {
-                                return <Route key={route.key} path={`${route.path}`} component={route.component} />
+                                return (
+                                    <Route
+                                        key={route.key}
+                                        path={`/${route.key}${route.params ? `/${route.params}` : ''}`}
+                                        component={route.component}
+                                    />
+                                )
                             })}
                             <Redirect push to={`/${defaultRoute}`} />
                         </Switch>

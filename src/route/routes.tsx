@@ -1,11 +1,10 @@
 import { Roles } from '@/enums/globalEnums'
-// import auth, { AuthParams } from '@/utils/authentication'
 
 export type IRoutes = {
-    path: string
     key: string
     name: string
     redirect?: string
+    params?: string
     componentKey?: string
     component?: any
     // 当前页是否展示面包屑
@@ -19,30 +18,27 @@ export type IRoutes = {
 
 export const routes: IRoutes[] = [
     {
-        path: '/home',
         key: 'home',
         name: 'menu.home',
-        componentKey: 'Home/index',
+        componentKey: 'home/index',
         breadcrumb: false
     },
     {
-        path: '/list',
         key: 'list',
         name: 'menu.list',
         redirect: '/list/index',
         roles: [Roles.ADMIN, Roles.MEMBER],
         children: [
             {
-                path: '/list/index',
                 key: 'list/index',
                 name: 'list.index',
-                componentKey: 'List/index'
+                componentKey: 'list/index'
             },
             {
-                path: '/list/detail/:id',
                 key: 'list/detail',
                 name: 'list.detail',
-                componentKey: 'List/detail',
+                params: ':id',
+                componentKey: 'list/detail',
                 breadcrumb: true,
                 hidden: true
             }
