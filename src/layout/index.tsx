@@ -124,7 +124,7 @@ function PageLayout() {
         arr.forEach(key => {
             const reg = RegExp(`^${key}`)
             if (reg.test(str)) {
-                if (key.length > rc?.length) {
+                if (key.length > rc.length) {
                     rc = key
                 }
             }
