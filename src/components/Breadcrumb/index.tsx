@@ -9,14 +9,21 @@ const BreadItem = Bread.Item
 const Breadcrumb = ({ breadcrumb }: { breadcrumb: any[] }) => {
     const t = useLocale()
     const history = useHistory()
+    console.log('🤪 breadcrumb >>:', breadcrumb)
     return (
         <Bread separator={<IconRight />}>
-            {breadcrumb.map(route => (
+            {breadcrumb.map((route, index) => (
                 <BreadItem key={route.key}>
-                    {route.redirect ? (
-                        <a onClick={() => history.replace(route.redirect)}>{t[route.name]}</a>
+                    {index === breadcrumb.length - 1 || (index === 0 && !route.redirect) ? (
+                        <span>
+                            {route.icon && <span>{route.icon}&nbsp;&nbsp;</span>}
+                            {t[route.name]}
+                        </span>
                     ) : (
-                        <span>{t[route.name]}</span>
+                        <a onClick={() => history.replace(`/${route.redirect ? route.redirect : route.key}`)}>
+                            {route.icon && <span>{route.icon}&nbsp;&nbsp;</span>}
+                            {t[route.name]}
+                        </a>
                     )}
                 </BreadItem>
             ))}

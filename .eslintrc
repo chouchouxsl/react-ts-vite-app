@@ -117,6 +117,7 @@
         "react/function-component-definition": 0,
         "no-undef": 0,
         "dot-notation": 0,
-        "prefer-regex-literals": 0
+        "prefer-regex-literals": 0,
+        "no-else-return": 0
     }
 }

@@ -1,8 +1,8 @@
 import React, { useMemo, useState, lazy, useEffect, useRef } from 'react'
-import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Layout, Menu } from '@arco-design/web-react'
-import { IconDashboard, IconList, IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
+import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
 import qs from 'query-string'
 import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
@@ -26,22 +26,6 @@ const MenuItem = Menu.Item
 const SubMenu = Menu.SubMenu
 
 /**
- * @description: 根据路由的key获取icon
- * @param {*} key
- * @return {*} element
- */
-function getIconFromKey(key: string) {
-    switch (key) {
-        case 'home':
-            return <IconDashboard className={styles.icon} />
-        case 'list':
-            return <IconList className={styles.icon} />
-        default:
-            return <div className={styles['icon-empty']} />
-    }
-}
-
-/**
  * @description: 路由表格式化
  * @return {*}  newRoutes 格式化后的路由
  */
@@ -52,10 +36,14 @@ function getFlattenRoutes(routes: IRoutes[]) {
 
     const recursion = (_routes: IRoutes[]) => {
         _routes.forEach((route: IRoutes) => {
-            if (route.componentKey) {
-                route.component = lazy(modules[`../pages/${route.componentKey}.tsx`] as any)
+            if (route.key) {
+                const url = `../pages/${route.key}.tsx`
+                if (modules[url]) {
+                    route.component = lazy(modules[url] as any)
+                }
                 newRoutes.push(route)
-            } else if (isArray(route.children) && (route.children as IRoutes[]).length) {
+            }
+            if (isArray(route.children) && (route.children as IRoutes[]).length) {
                 recursion(route.children as IRoutes[])
             }
         })
@@ -121,14 +109,15 @@ function PageLayout() {
     const routeMap = useRef<Map<string, IRoutes[]>>(new Map())
 
     useEffect(() => {
-        for (const [k, v] of routeMap.current.entries()) {
-            console.log('🤪 iterator >>:', k, v)
-            console.log('🤪 pathname.includes(k) >>:', pathname.includes(k))
-        }
-        console.log('🤪 routeMap >>:', routeMap.current)
+        let key = pathname
 
-        console.log('🤪 pathname >>:', pathname)
-        setBreadCrumb((routeMap.current.get(pathname) as IRoutes[]) || [])
+        for (const k of routeMap.current.keys()) {
+            if (pathname.indexOf(k) !== -1) {
+                key = k
+            }
+        }
+
+        setBreadCrumb((routeMap.current.get(key) as IRoutes[]) || [])
     }, [pathname])
 
     // 解决 点击返回 前进 刷新 侧边栏不变问题
@@ -136,16 +125,31 @@ function PageLayout() {
         setSelectedKeys(defaultSelectedKeys)
     }, [currentComponent])
 
+    // 转换path
+    function conversionRouteKey(arr: any[], path: string) {
+        let rc = ''
+        arr.forEach(route => {
+            if (path.indexOf(route.key) !== -1) {
+                if (route.key.length > rc?.length) {
+                    rc = route.key
+                }
+            }
+        })
+
+        return rc
+    }
+
+    // 获取当前路由
     function getCurrRoute(key: string) {
+        key = conversionRouteKey(flattenRoutes, key)
         return flattenRoutes.find(route => route.key === key)
     }
 
     // 点击菜单的回调 跳路由
     function onClickMenuItem(key: string) {
-        const currRoute = getCurrRoute(key)
-        const pageTitle = t[currRoute!.name] || currRoute!.name
-        setPageTitle(pageTitle)
-        history.replace(currRoute?.key ? currRoute.key : `/${key}`)
+        const currRoute = getCurrRoute(key) as IRoutes
+        setPageTitle(t[currRoute?.name])
+        history.replace(currRoute?.key ? `/${currRoute.key}` : `/${key}`)
     }
 
     /**
@@ -155,62 +159,44 @@ function PageLayout() {
      */
     function renderRoutes(t: string[]) {
         routeMap.current.clear()
-
-        const sideNodes: any[] = []
-
-        function recursion(_routes: IRoutes[], level = 1, parentRoute: IRoutes[] = []) {
+        return function recursion(_routes: IRoutes[], level = 1, parentRoute: IRoutes[] = []) {
             return _routes.map(route => {
                 const { breadcrumb = true, hidden } = route
                 /* 将路由存取成一个映射关系 */
-                routeMap.current.set(route.key, breadcrumb ? [...parentRoute, route] : [])
-                /* 设置hidden的 不生成菜单 */
-                if (hidden) {
-                    return ''
-                }
+                routeMap.current.set(`/${route.key}`, breadcrumb ? [...parentRoute, route] : [])
                 // 路由内容Dom
                 const contentDom = (
                     <>
-                        {getIconFromKey(route.key)} {t[route.name] || route.name}
+                        {route.icon || <div className={styles['icon-empty']} />} {t[route.name] || route.name}
                     </>
                 )
 
-                // 判断是不是没有children的菜单 直接使用MenuItem组件
-                if (!isArray(route.children) || (isArray(route.children) && !route.children?.length)) {
-                    // 不是一级菜单的 直接返回
-                    if (level > 1) {
-                        return <MenuItem key={route.key}> {contentDom}</MenuItem>
-                    }
-                    // 如果是第一级 push到容器里
-                    sideNodes.push(
-                        <MenuItem key={route.key}>
-                            <Link to={`/${route.key}`}>{contentDom}</Link>
-                        </MenuItem>
-                    )
-                }
+                const visibleChildren: IRoutes[] = (route.children || []).filter(child => {
+                    const { hidden, breadcrumb = true } = child
 
-                // 如果存在childrem 需要使用SubMenu组件包裹
-                if (isArray(route.children) && route.children?.length) {
-                    // 不是一级菜单的 直接返回
-                    if (level > 1) {
-                        return (
-                            <SubMenu key={route.key} title={contentDom}>
-                                {recursion(route.children, level + 1, [...parentRoute, route])}
-                            </SubMenu>
-                        )
+                    if (hidden || route.hidden) {
+                        routeMap.current.set(`/${child.key}`, breadcrumb ? [...parentRoute, route, child] : [])
                     }
-                    // 如果是第一级 push到容器里
-                    sideNodes.push(
+
+                    return !hidden
+                })
+
+                /* 设置hidden的 不生成菜单 */
+                if (hidden) return ''
+
+                console.log('🤪 visibleChildren >>:', visibleChildren)
+
+                if (visibleChildren.length) {
+                    return (
                         <SubMenu key={route.key} title={contentDom}>
-                            {recursion(route.children, level + 1, [...parentRoute, route])}
+                            {recursion(route.children as IRoutes[], level + 1, [...parentRoute, route])}
                         </SubMenu>
                     )
                 }
+
+                return <MenuItem key={route.key}> {contentDom}</MenuItem>
             })
         }
-
-        recursion(routes)
-
-        return sideNodes
     }
 
     return (
@@ -235,7 +221,7 @@ function PageLayout() {
                                 selectedKeys={selectedKeys}
                                 autoOpen
                             >
-                                {renderRoutes(t)}
+                                {renderRoutes(t)(routes)}
                             </Menu>
                         </div>
                         <div className={styles.collapseBtn} onClick={toggleCollapse}>
@@ -252,12 +238,20 @@ function PageLayout() {
                         )}
                         <Switch>
                             {flattenRoutes.map(route => {
+                                let params = ''
+                                if (route.params?.length) {
+                                    route.params?.forEach(p => {
+                                        params += `/:${p}`
+                                    })
+                                }
                                 return (
-                                    <Route
-                                        key={route.key}
-                                        path={`/${route.key}${route.params ? `/${route.params}` : ''}`}
-                                        component={route.component}
-                                    />
+                                    route.component && (
+                                        <Route
+                                            key={route.key}
+                                            path={`/${route.key}${params}`}
+                                            component={route.component}
+                                        />
+                                    )
                                 )
                             })}
                             <Redirect push to={`/${defaultRoute}`} />

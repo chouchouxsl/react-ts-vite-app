@@ -1,12 +1,14 @@
+import { IconDashboard, IconList } from '@arco-design/web-react/icon'
 import { Roles } from '@/enums/globalEnums'
 
 export type IRoutes = {
     key: string
     name: string
     redirect?: string
-    params?: string
-    componentKey?: string
-    component?: any
+    params?: string[]
+    activePath?: string
+    icon?: React.ReactNode
+    component?: React.ComponentType<any>
     // 当前页是否展示面包屑
     breadcrumb?: boolean
     // 当前路由是否渲染菜单项，为 true 的话不会在菜单中显示，但可通过路由地址访问。
@@ -18,29 +20,30 @@ export type IRoutes = {
 
 export const routes: IRoutes[] = [
     {
-        key: 'home',
+        key: 'home/index',
         name: 'menu.home',
-        componentKey: 'home/index',
+        icon: <IconDashboard />,
         breadcrumb: false
     },
     {
         key: 'list',
         name: 'menu.list',
-        redirect: '/list/index',
+        redirect: 'list/index',
+        icon: <IconList />,
         roles: [Roles.ADMIN, Roles.MEMBER],
         children: [
             {
                 key: 'list/index',
                 name: 'list.index',
-                componentKey: 'list/index'
-            },
-            {
-                key: 'list/detail',
-                name: 'list.detail',
-                params: ':id',
-                componentKey: 'list/detail',
-                breadcrumb: true,
-                hidden: true
+                children: [
+                    {
+                        key: 'list/detail',
+                        name: 'list.detail',
+                        params: ['id'],
+                        activePath: 'list/index',
+                        hidden: true
+                    }
+                ]
             }
         ]
     }
