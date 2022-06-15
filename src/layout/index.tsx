@@ -109,14 +109,7 @@ function PageLayout() {
     const routeMap = useRef<Map<string, IRoutes[]>>(new Map())
 
     useEffect(() => {
-        let key = pathname
-
-        for (const k of routeMap.current.keys()) {
-            if (pathname.indexOf(k) !== -1) {
-                key = k
-            }
-        }
-
+        const key = conversionRouteKey(Array.from(routeMap.current.keys()), pathname)
         setBreadCrumb((routeMap.current.get(key) as IRoutes[]) || [])
     }, [pathname])
 
@@ -126,22 +119,25 @@ function PageLayout() {
     }, [currentComponent])
 
     // 转换path
-    function conversionRouteKey(arr: any[], path: string) {
+    function conversionRouteKey(arr: any[], str: string) {
         let rc = ''
-        arr.forEach(route => {
-            if (path.indexOf(route.key) !== -1) {
-                if (route.key.length > rc?.length) {
-                    rc = route.key
+        arr.forEach(key => {
+            const reg = RegExp(`^${key}`)
+            if (reg.test(str)) {
+                if (key.length > rc?.length) {
+                    rc = key
                 }
             }
         })
-
         return rc
     }
 
     // 获取当前路由
     function getCurrRoute(key: string) {
-        key = conversionRouteKey(flattenRoutes, key)
+        key = conversionRouteKey(
+            flattenRoutes.map(t => t.key),
+            key
+        )
         return flattenRoutes.find(route => route.key === key)
     }
 
@@ -183,8 +179,6 @@ function PageLayout() {
 
                 /* 设置hidden的 不生成菜单 */
                 if (hidden) return ''
-
-                console.log('🤪 visibleChildren >>:', visibleChildren)
 
                 if (visibleChildren.length) {
                     return (
