@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { lazy, useContext, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, Button, Dropdown, Menu, Select, Space, Tooltip, Typography } from '@arco-design/web-react'
 import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
@@ -8,7 +8,7 @@ import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
 import { ThemeEnum } from '@/enums/globalEnums'
 import { GlobalContext } from '@/context/globalContext'
-import { setPageTitle } from '@/utils/set-page-title'
+import setPageIcon from '@/utils/set-page-icon'
 
 interface INavBar {
     className: string
@@ -25,6 +25,10 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
 
     const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
 
+    const Logo = new URL(`../../assets/icons/${settings!.logo}.svg`, import.meta.url).href
+
+    setPageIcon(Logo)
+
     // 登出
     const onMenuItemClick = (key: string) => {
         if (key === 'logout') {
@@ -39,11 +43,10 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
         <div className={className}>
             <div className={styles.warp}>
                 <div className={styles.left}>
-                    <Space size={8}>
-                        <Typography.Title style={{ margin: 0, fontSize: 18 }} heading={5}>
-                            {settings?.title}
-                        </Typography.Title>
-                    </Space>
+                    <div className={styles.logo}>
+                        <img src={Logo} />
+                    </div>
+                    <div className={styles.title}>{settings?.title}</div>
                 </div>
                 <ul className={styles.right}>
                     <li>

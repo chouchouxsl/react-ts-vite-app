@@ -7,6 +7,7 @@ declare module '@/settings.json' {
         themeColor: string
         menuWidth: number
         title: string
+        logo: string
         isShowNprogress: boolean
     }
 
