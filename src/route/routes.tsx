@@ -1,5 +1,5 @@
-import { IconDashboard, IconList } from '@arco-design/web-react/icon'
 import { Roles } from '@/enums/globalEnums'
+import SvgIcon from '@/components/SvgIcon'
 
 export type IRoutes = {
     key: string
@@ -22,14 +22,14 @@ export const routes: IRoutes[] = [
     {
         key: 'home/index',
         name: 'menu.home',
-        icon: <IconDashboard />,
+        icon: <SvgIcon name="shutiao" />,
         breadcrumb: false
     },
     {
         key: 'list',
         name: 'menu.list',
         redirect: 'list/index',
-        icon: <IconList />,
+        icon: <SvgIcon name="hebaodan" />,
         roles: [Roles.ADMIN, Roles.MEMBER],
         children: [
             {
