@@ -1,14 +1,12 @@
-import React, { lazy, useContext, useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Avatar, Button, Dropdown, Menu, Select, Space, Tooltip, Typography } from '@arco-design/web-react'
-import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
+import { Avatar, Dropdown, Menu, Typography } from '@arco-design/web-react'
 import { ReducerState } from '@/redux'
 import styles from './style/index.module.less'
 import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
-import { ThemeEnum } from '@/enums/globalEnums'
-import { GlobalContext } from '@/context/globalContext'
 import setPageIcon from '@/utils/set-page-icon'
+import Setteing from './setteing'
 
 interface INavBar {
     className: string
@@ -20,10 +18,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
     const settings = useSelector((state: ReducerState) => state.global.settings)
     const dispatch = useDispatch()
     // 切换语言
-    const { setLang, lang, theme, setTheme } = useContext(GlobalContext)
     const t = useLocale()
-
-    const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
 
     const Logo = new URL(`../../assets/icons/${settings!.logo}.svg`, import.meta.url).href
 
@@ -49,38 +44,7 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                     <div className={styles.title}>{settings?.title}</div>
                 </div>
                 <ul className={styles.right}>
-                    <li>
-                        <Select
-                            options={[
-                                { label: '中文', value: 'zh-CN' },
-                                { label: 'English', value: 'en-US' }
-                            ]}
-                            triggerProps={{
-                                autoAlignPopupWidth: false,
-                                autoAlignPopupMinWidth: true,
-                                position: 'bl'
-                            }}
-                            bordered={false}
-                            value={lang}
-                            onChange={setLang}
-                        />
-                    </li>
-                    <li>
-                        <Tooltip
-                            content={
-                                theme === ThemeEnum.LIGHT
-                                    ? t['settings.navbar.theme.toDark']
-                                    : t['settings.navbar.theme.toLight']
-                            }
-                        >
-                            <Button
-                                type="text"
-                                icon={theme === ThemeEnum.LIGHT ? <IconMoonFill /> : <IconSunFill />}
-                                onClick={changeTheme}
-                                style={{ fontSize: 20 }}
-                            />
-                        </Tooltip>
-                    </li>
+                    <Setteing />
                     {userInfo && (
                         <li>
                             <Dropdown

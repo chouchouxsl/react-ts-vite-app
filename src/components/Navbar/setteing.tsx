@@ -3,7 +3,6 @@ import { IconMoonFill, IconSunFill } from '@arco-design/web-react/icon'
 import React, { useContext } from 'react'
 import { ThemeEnum } from '@/enums/globalEnums'
 import useLocale from '@/hooks/useLocale'
-import styles from './style/index.module.less'
 import { GlobalContext } from '@/context/globalContext'
 
 const Setteing = () => {
@@ -15,7 +14,7 @@ const Setteing = () => {
     const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
 
     return (
-        <ul className={styles['app-setteing']}>
+        <>
             <li>
                 <Select
                     options={[
@@ -49,7 +48,7 @@ const Setteing = () => {
                     />
                 </Tooltip>
             </li>
-        </ul>
+        </>
     )
 }
 
