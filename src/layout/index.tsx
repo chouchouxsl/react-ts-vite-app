@@ -39,7 +39,7 @@ function getFlattenRoutes(routes: IRoutes[]) {
             if (route.key) {
                 const url = `../pages/${route.key}.tsx`
                 if (modules[url]) {
-                    route.component = lazy(modules[url] as any)
+                    route.component = lazy(modules[url] as () => Promise<{ default: React.ComponentType<any> }>)
                 }
                 newRoutes.push(route)
             }
@@ -113,10 +113,11 @@ function PageLayout() {
         setBreadCrumb((routeMap.current.get(key) as IRoutes[]) || [])
     }, [pathname])
 
-    // 解决 点击返回 前进 刷新 侧边栏不变问题
+    // 当路由变化时 设置侧边栏选中状态
     useEffect(() => {
-        setSelectedKeys(defaultSelectedKeys)
-    }, [currentComponent])
+        //  存在activePath的使用activePath选中
+        setSelectedKeys(currRoute?.activePath ? [currRoute?.activePath] : defaultSelectedKeys)
+    }, [currRoute])
 
     // 转换path
     function conversionRouteKey(arr: any[], str: string) {
