@@ -43,10 +43,10 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                     </div>
                     <div className={styles.title}>{settings?.title}</div>
                 </div>
-                <ul className={styles.right}>
+                <div className={styles.right}>
                     <Setteing />
                     {userInfo && (
-                        <li>
+                        <div className={styles.user}>
                             <Dropdown
                                 trigger="click"
                                 position="bottom"
@@ -63,9 +63,9 @@ const Navbar: React.FC<INavBar> = ({ className }) => {
                                     <Typography.Text className={styles.username}>{userInfo.username}</Typography.Text>
                                 </div>
                             </Dropdown>
-                        </li>
+                        </div>
                     )}
-                </ul>
+                </div>
             </div>
         </div>
     )

@@ -11,9 +11,9 @@ export default ({ height = '100%', width = '100%', borderRadius = 0, preview = f
     const holderImg = (
         <img
             style={{
-                width: `${width}`,
-                height: `${height}`,
-                borderRadius: `${borderRadius}`,
+                // width: `${width}`,
+                // height: `${height}`,
+                // borderRadius: `${borderRadius}`,
                 objectFit: 'cover'
             }}
             src={loadingImg}
@@ -21,7 +21,14 @@ export default ({ height = '100%', width = '100%', borderRadius = 0, preview = f
     )
 
     return (
-        <LazyLoad placeholder={holderImg}>
+        <LazyLoad
+            style={{
+                width: `${width}`,
+                height: `${height}`,
+                borderRadius: `${borderRadius}`
+            }}
+            placeholder={holderImg}
+        >
             <Image
                 {...props}
                 height={height}

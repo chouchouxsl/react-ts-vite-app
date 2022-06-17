@@ -27,33 +27,40 @@
 
     .right {
         display: flex;
+        align-items: center;
         padding-right: 20px;
         list-style: none;
     }
 }
 
-li {
+.app-setteing {
     display: flex;
-    align-items: center;
+    padding-right: 20px;
+    list-style: none;
 
-    &:not(:last-child) {
-        padding-right: 20px;
-    }
+    div {
+        display: flex;
+        align-items: center;
 
-    :global(.arco-select) {
-        width: 90px;
-
-        :global(.arco-select-view) {
-            border-radius: 30px !important;
+        &:not(:last-child) {
+            padding-right: 20px;
         }
 
-        :global(.arco-select-view-value) {
-            text-align: center;
+        :global(.arco-select) {
+            width: 90px;
+
+            :global(.arco-select-view) {
+                border-radius: 30px !important;
+            }
+
+            :global(.arco-select-view-value) {
+                text-align: center;
+            }
         }
     }
-}
 
-a {
-    text-decoration: none;
-    color: var(--color-text-1);
+    a {
+        text-decoration: none;
+        color: var(--color-text-1);
+    }
 }

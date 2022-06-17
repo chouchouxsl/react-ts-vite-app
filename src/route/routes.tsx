@@ -35,10 +35,12 @@ export const routes: IRoutes[] = [
             {
                 key: 'list/index',
                 name: 'list.index',
+                icon: <SvgIcon name="bingkuai" />,
                 children: [
                     {
                         key: 'list/detail',
                         name: 'list.detail',
+                        icon: <SvgIcon name="cha" />,
                         params: ['id'],
                         activePath: 'list/index',
                         hidden: true

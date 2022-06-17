@@ -9,7 +9,25 @@ class Home extends Component {
         name: '首页'
     }
 
-    componentDidMount() {}
+    socketConnect(url: string) {
+        // 客户端与服务器进行连接
+        const ws = new WebSocket(url) // 返回`WebSocket`对象，赋值给变量ws
+        // 连接成功回调
+        ws.onopen = e => {
+            console.log('连接成功', e)
+            ws.send('我发送消息给服务端') // 客户端与服务器端通信
+        }
+        // 监听服务器端返回的信息
+        ws.onmessage = e => {
+            console.log('服务器端返回：', e.data)
+            // do something
+        }
+        return ws // 返回websocket对象
+    }
+
+    componentDidMount() {
+        this.socketConnect('ws://172.0.0.1:3345')
+    }
 
     componentDidUpdate() {}
 

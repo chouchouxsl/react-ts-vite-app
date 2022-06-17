@@ -4,6 +4,7 @@ import React, { useContext } from 'react'
 import { ThemeEnum } from '@/enums/globalEnums'
 import useLocale from '@/hooks/useLocale'
 import { GlobalContext } from '@/context/globalContext'
+import styles from './style/index.module.less'
 
 const Setteing = () => {
     // 切换语言
@@ -14,8 +15,8 @@ const Setteing = () => {
     const changeTheme = () => setTheme && setTheme(theme === ThemeEnum.LIGHT ? ThemeEnum.DARK : ThemeEnum.LIGHT)
 
     return (
-        <>
-            <li>
+        <div className={styles['app-setteing']}>
+            <div>
                 <Select
                     options={[
                         { label: '中文', value: 'zh-CN' },
@@ -29,8 +30,8 @@ const Setteing = () => {
                     value={lang}
                     onChange={setLang}
                 />
-            </li>
-            <li>
+            </div>
+            <div>
                 <Tooltip
                     position="br"
                     content={
@@ -46,8 +47,8 @@ const Setteing = () => {
                         style={{ fontSize: 20 }}
                     />
                 </Tooltip>
-            </li>
-        </>
+            </div>
+        </div>
     )
 }
 

@@ -50,21 +50,19 @@ const AListDetail: React.FC = () => {
     }
 
     useEffect(() => {
-        // getList()
+        getList()
     }, [effect])
 
     async function getList() {
         setLoading(true)
         try {
-            const res = await getListByIdApi<RequestParams>({ id: params?.id })
-            const { list, total } = await getWorksByIdApi<FindWorks>({
+            const { actor, list, total } = await getWorksByIdApi<FindWorks>({
                 id: params?.id,
                 pageNum: page.pageNum,
                 pageSize: page.pageSize,
                 title
             })
-            console.log('res :>> ', res, list)
-            setInfo(res)
+            setInfo(actor)
             setPage(v => ({ ...v, total }))
             setList(list)
         } catch (error) {

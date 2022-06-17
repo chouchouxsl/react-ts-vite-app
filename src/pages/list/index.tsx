@@ -34,14 +34,18 @@ const AList: React.FC = () => {
     }
 
     useEffect(() => {
-        // getList()
+        getList()
         console.log('🤪 name >>:', name)
     }, [effect])
 
     async function getList() {
-        const res = await getListAllApi()
-        console.log('res :>> ', res)
-        setList(res)
+        const { list, total } = await getListAllApi({
+            pageNum: page.pageNum,
+            pageSize: page.pageSize,
+            actor_name: name
+        })
+        setList(list)
+        setPage(v => ({ ...v, total }))
     }
 
     const deleteItem = async (id: number) => {
