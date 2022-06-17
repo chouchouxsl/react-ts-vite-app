@@ -26,7 +26,6 @@ const Setteing = () => {
                         autoAlignPopupMinWidth: true,
                         position: 'bl'
                     }}
-                    bordered={false}
                     value={lang}
                     onChange={setLang}
                 />

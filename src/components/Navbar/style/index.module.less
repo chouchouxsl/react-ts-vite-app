@@ -29,16 +29,31 @@
         display: flex;
         padding-right: 20px;
         list-style: none;
+    }
+}
 
-        li {
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
+li {
+    display: flex;
+    align-items: center;
+
+    &:not(:last-child) {
+        padding-right: 20px;
+    }
+
+    :global(.arco-select) {
+        width: 90px;
+
+        :global(.arco-select-view) {
+            border-radius: 30px !important;
         }
 
-        a {
-            text-decoration: none;
-            color: var(--color-text-1);
+        :global(.arco-select-view-value) {
+            text-align: center;
         }
     }
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-text-1);
 }
