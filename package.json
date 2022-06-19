@@ -40,7 +40,8 @@
     "react-lazyload": "^3.2.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.2.1",
-    "redux": "^4.1.2"
+    "redux": "^4.1.2",
+    "socket.io-client": "^4.5.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.0.1",

@@ -1,32 +1,38 @@
 import React, { Component } from 'react'
+import { io } from 'socket.io-client'
 import style from './style/index.module.less'
 import SvgIcon from '@/components/SvgIcon'
 import AuthWarp from '@/components/AuthWarp'
 import { Roles } from '@/enums/globalEnums'
 
 class Home extends Component {
+    public socket: any
+
     status = {
         name: '首页'
     }
 
     socketConnect(url: string) {
-        // 客户端与服务器进行连接
-        const ws = new WebSocket(url) // 返回`WebSocket`对象，赋值给变量ws
-        // 连接成功回调
-        ws.onopen = e => {
-            console.log('连接成功', e)
-            ws.send('我发送消息给服务端') // 客户端与服务器端通信
-        }
-        // 监听服务器端返回的信息
-        ws.onmessage = e => {
-            console.log('服务器端返回：', e.data)
-            // do something
-        }
-        return ws // 返回websocket对象
+        this.socket = io(url, { path: '/socket' })
+        this.socket.on('enter', (data: any) => {
+            console.log('🤪 enter >>:', data)
+        })
+        this.socket.on('enterName', (name: string) => {
+            console.log('🤪 enterName >>:', name)
+        })
+        this.socket.on('message', (data: any) => {
+            console.log('🤪 message >>:', data)
+        })
+        this.socket.on('name', (name: string) => {
+            console.log('🤪 name >>:', name)
+        })
+        this.socket.on('leave', (data: any) => {
+            console.log('🤪 leave >>:', data)
+        })
     }
 
     componentDidMount() {
-        this.socketConnect('ws://172.0.0.1:3345')
+        this.socketConnect('ws://localhost:3345')
     }
 
     componentDidUpdate() {}
@@ -35,7 +41,7 @@ class Home extends Component {
 
     render() {
         return (
-            <div className={style.pages}>
+            <div className={style.pages} onClick={() => this.socket.emit('message', 'xxxxx')}>
                 <AuthWarp roles={[Roles.MEMBER]}>
                     <SvgIcon name="dark" color="red" />
                     status: {this.status.name}

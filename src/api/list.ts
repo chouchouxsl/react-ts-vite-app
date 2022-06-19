@@ -6,6 +6,12 @@ export const getListByIdApi = <T = any>(params?: T) => getFetch({ url: '/javdb/l
 
 export const getWorksByIdApi = <T = any>(params?: T) => getFetch({ url: '/javdb/list/works', params })
 
-export const crawlingInfoApi = <T = any>(data?: T) => postFetch({ url: '/javdb/list/crawling-info', data })
+export const getWorksInfoApi = <T = any>(params?: T) => getFetch({ url: '/javdb/list/find-works-info', params })
+
+export const crawlingActorListApi = <T = any>(data?: T) => postFetch({ url: '/javdb/list/crawling-actor-list', data })
+
+export const crawlingWorksAllApi = <T = any>(data?: T) => postFetch({ url: '/javdb/list/crawling-all-info', data })
+
+export const crawlingWorksListApi = <T = any>(data?: T) => postFetch({ url: '/javdb/list/crawling-works-info', data })
 
 export const deleteActorItemApi = <T = any>(data?: T) => postFetch({ url: '/javdb/list/delete', data })

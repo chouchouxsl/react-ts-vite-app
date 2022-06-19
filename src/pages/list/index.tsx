@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
 import { Button, Form, Input, List, Message, Modal, Pagination, Popconfirm, Spin } from '@arco-design/web-react'
-import { getListAllApi, deleteActorItemApi, crawlingInfoApi } from '@/api'
+import { getListAllApi, deleteActorItemApi, crawlingActorListApi } from '@/api'
 import style from './style/index.module.less'
 import { history } from '@/route'
 import useLocale from '@/hooks/useLocale'
@@ -187,7 +187,7 @@ const AList: React.FC = () => {
                                     await form.validate()
                                     const { link: url } = form.getFields()
                                     setLoading(true)
-                                    const res = await crawlingInfoApi({ url })
+                                    const res = await crawlingActorListApi({ url })
                                     setLoading(false)
                                     Message.success('success')
                                 } catch (error) {}

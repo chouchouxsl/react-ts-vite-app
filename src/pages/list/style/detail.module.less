@@ -38,3 +38,27 @@
         }
     }
 }
+
+.works-info {
+    position: relative;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 500px;
+
+    :global(.arco-card) {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+
+    .videowarp {
+        video {
+            width: 100%;
+        }
+    }
+
+    .imgswarp {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-gap: 8px;
+    }
+}

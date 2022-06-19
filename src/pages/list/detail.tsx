@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Card, Input, Pagination, Image } from '@arco-design/web-react'
-import { IconFindReplace } from '@arco-design/web-react/icon'
-import { getListByIdApi, getWorksByIdApi } from '@/api'
+import {
+    Card,
+    Link,
+    Input,
+    Pagination,
+    Image,
+    Message,
+    Modal,
+    Descriptions,
+    Space,
+    List,
+    Button
+} from '@arco-design/web-react'
+import { IconCopy, IconFindReplace } from '@arco-design/web-react/icon'
+import { getWorksInfoApi, getWorksByIdApi, crawlingWorksListApi, crawlingWorksAllApi } from '@/api'
 import style from './style/detail.module.less'
 import useLocale from '@/hooks/useLocale'
 import SvgIcon from '@/components/SvgIcon'
 import useUpdate from '@/hooks/useUpdate'
 import LazyImg from '@/components/LazyImg'
 import OperationHead from '@/components/OperationHead'
+import clipboard from '@/utils/clipboard'
 
 const Meta = Card.Meta
 const InputSearch = Input.Search
@@ -40,7 +53,9 @@ const AListDetail: React.FC = () => {
     const [loading, setLoading] = useState(false)
     const [title, setTitle] = useState('')
     const [info, setInfo] = useState<any>(null)
+    const [actor, setActor] = useState<any>(null)
     const [list, setList] = useState<any[]>([])
+    const [isShowDialog, setShowDialog] = useState(false)
 
     const onSearch = (num = 1) => {
         setPage(v => ({ ...v, pageNum: num }))
@@ -62,7 +77,7 @@ const AListDetail: React.FC = () => {
                 pageSize: page.pageSize,
                 title
             })
-            setInfo(actor)
+            setActor(actor)
             setPage(v => ({ ...v, total }))
             setList(list)
         } catch (error) {
@@ -71,36 +86,80 @@ const AListDetail: React.FC = () => {
         }
     }
 
+    async function openWorksInfo(id: number) {
+        const res = await getWorksInfoApi({ id })
+        console.log('🤪 res >>:', res)
+        if (!res) {
+            Modal.confirm({
+                title: '温馨提示',
+                content: '还没有数据, 是否爬取?',
+                focusLock: false,
+                onOk: () => {
+                    return new Promise((resolve, reject) => {
+                        crawlingWorksListApi({ id })
+                            .then(res => {
+                                resolve(res)
+                                Message.success('爬取成功')
+                                openWorksInfo(id)
+                            })
+                            .catch(err => reject(err))
+                    }).catch(e => {
+                        Message.error({ content: e })
+                        throw e
+                    })
+                }
+            })
+            return
+        }
+        setInfo(res)
+        setShowDialog(true)
+    }
+
+    async function crawlingWorksAll() {
+        const res = await crawlingWorksAllApi({ id: actor.id })
+    }
+
+    function formatMagnetLinks(magnetLinks: any[]) {
+        return magnetLinks.map((mk: any) => mk.magnetLink).join('\n')
+    }
+
     return (
-        info && (
+        actor && (
             <div className="app-warp">
                 <OperationHead
                     leftDOM={
                         <div className={style['title-warp']}>
-                            <LazyImg width={100} height={100} borderRadius={100} src={info.avatar} />
-                            <div className={style.title}>{info.name} </div>
+                            <LazyImg width={100} height={100} borderRadius={100} src={actor.avatar} />
+                            <div className={style.title}>{actor.name} </div>
                         </div>
                     }
                     rightDOM={
-                        <InputSearch
-                            searchButton={<SvgIcon name="search" color="#fff" />}
-                            loading={loading}
-                            allowClear
-                            placeholder={t['list.detail.search']}
-                            style={{ width: 350, height: 40 }}
-                            value={title}
-                            onChange={val => setTitle(val)}
-                            onClear={() => {
-                                setTitle('')
-                                onSearch()
-                            }}
-                            onSearch={() => onSearch()}
-                            onPressEnter={e => {
-                                if (e.keyCode === 13) {
+                        <>
+                            <InputSearch
+                                searchButton={<SvgIcon name="search" color="#fff" />}
+                                loading={loading}
+                                allowClear
+                                placeholder={t['list.detail.search']}
+                                style={{ width: 350, height: 40 }}
+                                value={title}
+                                onChange={val => setTitle(val)}
+                                onClear={() => {
+                                    setTitle('')
                                     onSearch()
-                                }
-                            }}
-                        />
+                                }}
+                                onSearch={() => onSearch()}
+                                onPressEnter={e => {
+                                    if (e.keyCode === 13) {
+                                        onSearch()
+                                    }
+                                }}
+                            />
+                            <br />
+                            <br />
+                            <Button long size="large" type="primary" onClick={() => crawlingWorksAll()}>
+                                获取演员的所有信息
+                            </Button>
+                        </>
                     }
                 />
                 <div className={style.content}>
@@ -110,10 +169,7 @@ const AListDetail: React.FC = () => {
                             key={index}
                             cover={<LazyImg preview src={item.cover} />}
                             actions={[
-                                <span
-                                    className="icon-hover"
-                                    onClick={() => window.open(`https://javdb39.com/${item.href}`)}
-                                >
+                                <span className="icon-hover" onClick={() => openWorksInfo(item.id)}>
                                     <IconFindReplace />
                                 </span>
                             ]}
@@ -145,6 +201,117 @@ const AListDetail: React.FC = () => {
                         }}
                     />
                 </div>
+
+                <Modal
+                    title={<div style={{ textAlign: 'left' }}> 查看详情 </div>}
+                    visible={isShowDialog}
+                    unmountOnExit
+                    hideCancel
+                    onOk={() => {
+                        setShowDialog(false)
+                    }}
+                    onCancel={() => {
+                        setShowDialog(false)
+                    }}
+                    style={{ width: '70vw' }}
+                >
+                    {info && (
+                        <div className={style['works-info']}>
+                            <Card title="基本信息" bordered>
+                                <div className={style.base}>
+                                    <Descriptions
+                                        colon=" :"
+                                        border
+                                        data={[
+                                            {
+                                                label: '编号',
+                                                value: info.serialNumber
+                                            },
+                                            {
+                                                label: '时长',
+                                                value: info.duration
+                                            },
+                                            {
+                                                label: '发布日期',
+                                                value: info.releaseDate
+                                            },
+                                            {
+                                                label: '厂商',
+                                                value: info.maker
+                                            }
+                                        ]}
+                                    />
+                                </div>
+                            </Card>
+
+                            {info.previewVideo && info.previewVideo !== 'https:undefined' && (
+                                <Card title="视频预览" bordered>
+                                    <div className={style.videowarp}>
+                                        <video
+                                            id="preview-video"
+                                            src={info?.previewVideo}
+                                            controls
+                                            muted
+                                            preload="auto"
+                                        />
+                                    </div>
+                                </Card>
+                            )}
+
+                            {!!info.previewImages.length && (
+                                <Card title="图片预览" bordered>
+                                    <div className={style.imgswarp}>
+                                        <Image.PreviewGroup infinite>
+                                            {info.previewImages.map((src: any) => (
+                                                <Image src={src.imageLink} key={src.id} />
+                                                // <LazyImg preview src={src.imageLink} key={src.id} />
+                                            ))}
+                                        </Image.PreviewGroup>
+                                    </div>
+                                </Card>
+                            )}
+
+                            {!!info.magnetLinks.length && (
+                                <Card
+                                    title="磁力链接"
+                                    bordered
+                                    extra={
+                                        <Link
+                                            onClick={async () => {
+                                                await clipboard(formatMagnetLinks(info.magnetLinks))
+                                                Message.success('复制成功')
+                                            }}
+                                        >
+                                            <IconCopy />
+                                            &nbsp;全部复制
+                                        </Link>
+                                    }
+                                >
+                                    <List
+                                        dataSource={info.magnetLinks}
+                                        render={(item, index) => (
+                                            <List.Item
+                                                key={index}
+                                                actions={[
+                                                    <Link
+                                                        onClick={async () => {
+                                                            await clipboard(item.magnetLink)
+                                                            Message.success('复制成功')
+                                                        }}
+                                                    >
+                                                        <IconCopy />
+                                                    </Link>
+                                                ]}
+                                            >
+                                                {item.magnetLink}
+                                            </List.Item>
+                                        )}
+                                    />
+                                </Card>
+                            )}
+                        </div>
+                    )}
+                </Modal>
             </div>
         )
     )
