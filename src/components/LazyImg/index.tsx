@@ -25,7 +25,8 @@ export default ({ height = '100%', width = '100%', borderRadius = 0, preview = f
             style={{
                 width: `${width}`,
                 height: `${height}`,
-                borderRadius: `${borderRadius}`
+                borderRadius: `${borderRadius}`,
+                overflow: 'hidden'
             }}
             placeholder={holderImg}
         >
