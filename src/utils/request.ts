@@ -29,9 +29,7 @@ const config = {
 class NewAxios {
     instance: AxiosInstance
 
-    isShowNprogress: boolean
-
-    constructor(config: AxiosRequestConfig, isShowNprogress: boolean) {
+    constructor(config: AxiosRequestConfig, private isShowNprogress: boolean) {
         this.instance = axios.create(config)
 
         this.isShowNprogress = isShowNprogress
