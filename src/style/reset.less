@@ -2,6 +2,29 @@
 #nprogress .bar {
     background-color: @themeColor !important;
 }
+
+// 滚动条样式
+
+/* 定义滚动条高宽及背景
+ 高宽分别对应横竖滚动条的尺寸 */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* 定义滚动条轨道
+内阴影+圆角 */
+::-webkit-scrollbar-track {
+    background-color: rgba(255, 255, 255, 40%);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 30%);
+}
+
+/* 定义滑块
+内阴影+圆角 */
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 40%);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 30%);
+}
+
 // 重置气泡框
 .arco-popconfirm-content {
     .arco-popconfirm-title-text {
