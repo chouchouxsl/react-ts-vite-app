@@ -1,15 +1,17 @@
-import React, { FC, useRef, useState } from 'react'
-import { Form, Input, FormInstance, Button } from '@arco-design/web-react'
+import React, { useRef, useState } from 'react'
+import { Button, Form, Input } from '@arco-design/web-react'
 import { IconLock, IconUser } from '@arco-design/web-react/icon'
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import styles from './style/index.module.less'
 import { loginApi } from '@/api/login'
-import { IUser } from '@/redux/reducers/userInfo'
 import { history } from '@/route'
 import { getUserInfoApi } from '@/api/user'
 import { setPageTitle } from '@/utils/set-page-title'
 import useLocale from '@/hooks/useLocale'
+import styles from './style/index.module.less'
+import type { IUser } from '@/redux/reducers/userInfo'
+import type { FormInstance } from '@arco-design/web-react'
+import type { FC } from 'react'
 
 const loginForm: FC = () => {
     const formRef = useRef<FormInstance>(null)
@@ -41,7 +43,7 @@ const loginForm: FC = () => {
             history.push((state as any)?.redirect || '/')
         } catch (error) {
             setLoaing(false)
-            console.log('error :>> ', error)
+            console.log('error :>>', error)
         }
     }
     return (

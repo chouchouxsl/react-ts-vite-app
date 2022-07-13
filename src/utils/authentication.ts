@@ -15,7 +15,7 @@ export interface AuthParams {
 }
 
 const judge = (actions: string[], perm: string[]) => {
-    if (!perm || !perm.length) {
+    if (!perm || perm.length === 0) {
         return false
     }
 
@@ -44,7 +44,7 @@ const auth = (params: Auth, userPermission: UserPermission) => {
 
 export default (params: AuthParams, userPermission: UserPermission) => {
     const { requiredPermissions, oneOfPerm } = params
-    if (Array.isArray(requiredPermissions) && requiredPermissions.length) {
+    if (Array.isArray(requiredPermissions) && requiredPermissions.length > 0) {
         let count = 0
         for (const rp of requiredPermissions) {
             if (auth(rp, userPermission)) {

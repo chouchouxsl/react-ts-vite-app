@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
+    Button,
     Card,
-    Link,
-    Input,
-    Pagination,
+    Descriptions,
     Image,
+    Input,
+    Link,
+    List,
     Message,
     Modal,
-    Descriptions,
-    Space,
-    List,
-    Button
+    Pagination
 } from '@arco-design/web-react'
 import { IconCopy, IconFindReplace } from '@arco-design/web-react/icon'
-import { getWorksInfoApi, getWorksByIdApi, crawlingWorksListApi, crawlingWorksAllApi } from '@/api'
-import style from './style/detail.module.less'
+import { crawlingWorksAllApi, crawlingWorksListApi, getWorksByIdApi, getWorksInfoApi } from '@/api'
 import useLocale from '@/hooks/useLocale'
 import SvgIcon from '@/components/SvgIcon'
 import useUpdate from '@/hooks/useUpdate'
 import LazyImg from '@/components/LazyImg'
 import OperationHead from '@/components/OperationHead'
 import clipboard from '@/utils/clipboard'
+import style from './style/detail.module.less'
 
 const Meta = Card.Meta
 const InputSearch = Input.Search
@@ -65,9 +64,10 @@ const AListDetail: React.FC = () => {
     }
 
     useEffect(() => {
-        getList()
+        // getList()
     }, [effect])
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function getList() {
         setLoading(true)
         try {
@@ -80,7 +80,7 @@ const AListDetail: React.FC = () => {
             setActor(actor)
             setPage(v => ({ ...v, total }))
             setList(list)
-        } catch (error) {
+        } catch {
         } finally {
             setLoading(false)
         }
@@ -116,7 +116,7 @@ const AListDetail: React.FC = () => {
     }
 
     async function crawlingWorksAll() {
-        const res = await crawlingWorksAllApi({ id: actor.id })
+        await crawlingWorksAllApi({ id: actor.id })
     }
 
     function formatMagnetLinks(magnetLinks: any[]) {
@@ -169,7 +169,7 @@ const AListDetail: React.FC = () => {
                             key={index}
                             cover={<LazyImg preview src={item.cover} />}
                             actions={[
-                                <span className="icon-hover" onClick={() => openWorksInfo(item.id)}>
+                                <span key={index} className="icon-hover" onClick={() => openWorksInfo(item.id)}>
                                     <IconFindReplace />
                                 </span>
                             ]}
@@ -258,20 +258,19 @@ const AListDetail: React.FC = () => {
                                 </Card>
                             )}
 
-                            {!!info.previewImages.length && (
+                            {info.previewImages.length > 0 && (
                                 <Card title="图片预览" bordered>
                                     <div className={style.imgswarp}>
                                         <Image.PreviewGroup infinite>
                                             {info.previewImages.map((src: any) => (
                                                 <Image src={src.imageLink} key={src.id} />
-                                                // <LazyImg preview src={src.imageLink} key={src.id} />
                                             ))}
                                         </Image.PreviewGroup>
                                     </div>
                                 </Card>
                             )}
 
-                            {!!info.magnetLinks.length && (
+                            {info.magnetLinks.length > 0 && (
                                 <Card
                                     title="磁力链接"
                                     bordered
@@ -294,6 +293,7 @@ const AListDetail: React.FC = () => {
                                                 key={index}
                                                 actions={[
                                                     <Link
+                                                        key={index}
                                                         onClick={async () => {
                                                             await clipboard(item.magnetLink)
                                                             Message.success('复制成功')

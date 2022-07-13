@@ -1,7 +1,8 @@
-import defaultSettings, { ISettings } from '@/settings.json'
-import { IAcition } from '@/redux'
+import defaultSettings from '@/settings.json'
 import darkTheme from '@/utils/systemTheme'
 import { ThemeEnum } from '@/enums/globalEnums'
+import type { IAcition } from '@/redux'
+import type { ISettings } from '@/settings.json'
 
 export interface GlobalState {
     settings?: ISettings

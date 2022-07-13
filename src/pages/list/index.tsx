@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
 import { Button, Form, Input, List, Message, Modal, Pagination, Popconfirm, Spin } from '@arco-design/web-react'
-import { getListAllApi, deleteActorItemApi, crawlingActorListApi } from '@/api'
-import style from './style/index.module.less'
+import { crawlingActorListApi, deleteActorItemApi, getListAllApi } from '@/api'
 import { history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import LazyImg from '@/components/LazyImg'
@@ -11,6 +10,7 @@ import SvgIcon from '@/components/SvgIcon'
 import useUpdate from '@/hooks/useUpdate'
 import AuthWarp from '@/components/AuthWarp'
 import { Roles } from '@/enums/globalEnums'
+import style from './style/index.module.less'
 
 const AList: React.FC = () => {
     const t = useLocale()
@@ -34,8 +34,7 @@ const AList: React.FC = () => {
     }
 
     useEffect(() => {
-        getList()
-        console.log('🤪 name >>:', name)
+        // getList()
     }, [effect])
 
     async function getList() {
@@ -173,7 +172,7 @@ const AList: React.FC = () => {
                         rules={[
                             { required: true, message: t['list.dialog.input.placeholder'] },
                             {
-                                match: /^(https|http):\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i,
+                                match: /^(https|http):\/\/(([\w-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[\w-](\?)?)*)*$/i,
                                 message: t['list.dialog.input.placeholder']
                             }
                         ]}
@@ -187,10 +186,10 @@ const AList: React.FC = () => {
                                     await form.validate()
                                     const { link: url } = form.getFields()
                                     setLoading(true)
-                                    const res = await crawlingActorListApi({ url })
+                                    await crawlingActorListApi({ url })
                                     setLoading(false)
                                     Message.success('success')
-                                } catch (error) {}
+                                } catch {}
                             }}
                         />
                     </Form.Item>

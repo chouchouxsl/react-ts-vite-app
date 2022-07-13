@@ -1,13 +1,13 @@
-import React, { useEffect, Suspense, useMemo } from 'react'
+import React, { Suspense, useEffect, useMemo } from 'react'
 import ReactDOM from 'react-dom'
 import 'virtual:svg-icons-register'
 import './style/index.less'
 import { Provider } from 'react-redux'
-import { Router, Switch, Route } from 'react-router-dom'
+import { Route, Router, Switch } from 'react-router-dom'
 import { ConfigProvider, Spin } from '@arco-design/web-react'
 import zhCN from '@arco-design/web-react/es/locale/zh-CN'
 import enUS from '@arco-design/web-react/es/locale/en-US'
-import { history, AuthRoute } from '@/route'
+import { AuthRoute, history } from '@/route'
 import store from '@/redux'
 import PageLayout from '@/layout'
 import { GlobalContext } from '@/context/globalContext'
@@ -71,4 +71,4 @@ const Index: React.FC = () => {
     )
 }
 
-ReactDOM.render(<Index />, document.getElementById('root'))
+ReactDOM.render(<Index />, document.querySelector('#root'))

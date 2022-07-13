@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 
 interface OhPorp {
     width?: number | string
@@ -9,7 +9,7 @@ interface OhPorp {
     rightDOM?: ReactNode | null
 }
 
-export default ({ rightDOM, leftDOM, marginBottom = 20, borderRadius = 4, ...porp }: OhPorp) => {
+const OperationHead = ({ rightDOM, leftDOM, marginBottom = 20, borderRadius = 4, ...porp }: OhPorp) => {
     return (
         <div
             style={{
@@ -30,3 +30,5 @@ export default ({ rightDOM, leftDOM, marginBottom = 20, borderRadius = 4, ...por
         </div>
     )
 }
+
+export default OperationHead

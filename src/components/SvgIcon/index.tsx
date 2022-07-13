@@ -15,8 +15,6 @@ const SvgIcon: React.FC<SvgIconProps> = ({
     name,
     prefix = 'icon',
     color = 'var(--color-text-1)',
-    width = '14px',
-    height = '14px',
     size = '14px',
     ...props
 }) => {

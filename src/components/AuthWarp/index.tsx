@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { ReducerState } from '@/redux'
 import { Roles } from '@/enums/globalEnums'
+import type { ReducerState } from '@/redux'
 
 // `${Roles}`
 const AuthWarp: React.FC<{ roles?: Roles[] }> = props => {

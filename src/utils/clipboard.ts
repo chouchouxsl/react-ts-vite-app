@@ -2,7 +2,7 @@
 
 export default function clipboard(text: string) {
     if (navigator.clipboard) {
-        return navigator.clipboard.writeText(text).catch(function (err) {
+        return navigator.clipboard.writeText(text).catch(err => {
             throw err !== undefined ? err : new DOMException('The request is not allowed', 'NotAllowedError')
         })
     }
@@ -12,7 +12,7 @@ export default function clipboard(text: string) {
 
     span.style.whiteSpace = 'pre'
 
-    document.body.appendChild(span)
+    document.body.append(span)
 
     const selection = window.getSelection()
     const range = window.document.createRange()
@@ -24,12 +24,11 @@ export default function clipboard(text: string) {
     try {
         success = window.document.execCommand('copy')
     } catch (err) {
-        // eslint-disable-next-line
         console.log('error', err)
     }
 
     selection!.removeAllRanges()
-    window.document.body.removeChild(span)
+    span.remove()
 
     return success
         ? Promise.resolve()

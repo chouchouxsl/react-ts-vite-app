@@ -1,9 +1,10 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
-import LoginForm from './form'
 import Setteing from '@/components/Navbar/setteing'
-import styles from './style/index.module.less'
 import checkLogin from '@/utils/checkLogin'
+import LoginForm from './form'
+import styles from './style/index.module.less'
+import type { FC } from 'react'
 
 const Login: FC = () => {
     const { state } = useLocation()

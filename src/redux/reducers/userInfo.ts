@@ -1,4 +1,4 @@
-import { IAcition } from '../index'
+import type { IAcition } from '..'
 
 export type IUser = Partial<{
     id: string
@@ -32,6 +32,7 @@ const initialState: IUserInfo = {
 export default function (state: IUserInfo = initialState, action: IAcition) {
     switch (action.type) {
         case 'update-user':
+            // eslint-disable-next-line no-case-declarations
             const { userInfo } = action.payload
             localStorage.setItem('userInfo', JSON.stringify(userInfo))
             return {
@@ -39,6 +40,7 @@ export default function (state: IUserInfo = initialState, action: IAcition) {
                 userInfo
             }
         case 'add-token':
+            // eslint-disable-next-line no-case-declarations
             const { token } = action.payload
             localStorage.setItem('token', token)
             return {

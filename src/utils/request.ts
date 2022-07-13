@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Message } from '@arco-design/web-react'

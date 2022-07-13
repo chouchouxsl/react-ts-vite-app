@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { io } from 'socket.io-client'
-import style from './style/index.module.less'
 import SvgIcon from '@/components/SvgIcon'
 import AuthWarp from '@/components/AuthWarp'
 import { Roles } from '@/enums/globalEnums'
+import style from './style/index.module.less'
 
 class Home extends Component {
     public socket: any
@@ -35,9 +35,9 @@ class Home extends Component {
         this.socketConnect('ws://localhost:3345')
     }
 
-    componentDidUpdate() {}
+    // componentDidUpdate() {}
 
-    componentWillUnmount() {}
+    // componentWillUnmount() {}
 
     render() {
         return (

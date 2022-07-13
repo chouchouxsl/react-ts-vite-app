@@ -1,13 +1,23 @@
-import { Image, ImageProps } from '@arco-design/web-react'
+import React from 'react'
+import { Image } from '@arco-design/web-react'
 import LazyLoad from 'react-lazyload'
 import loadingImg from '@/assets/imgs/img-loading.gif'
+import type { ImageProps } from '@arco-design/web-react'
 
 type LazyImgProps = {
     src: string
     borderRadius?: number | string
+    overflow?: boolean
 } & ImageProps
 
-export default ({ height = '100%', width = '100%', borderRadius = 0, preview = false, ...props }: LazyImgProps) => {
+const LazyImg = ({
+    height = '100%',
+    width = '100%',
+    borderRadius = 0,
+    preview = false,
+    overflow = false,
+    ...props
+}: LazyImgProps) => {
     const holderImg = (
         <img
             style={{
@@ -28,7 +38,7 @@ export default ({ height = '100%', width = '100%', borderRadius = 0, preview = f
                 borderRadius: `${borderRadius}`,
                 overflow: 'hidden'
             }}
-            placeholder={holderImg}
+            overflow={overflow}
         >
             <Image
                 {...props}
@@ -41,3 +51,5 @@ export default ({ height = '100%', width = '100%', borderRadius = 0, preview = f
         </LazyLoad>
     )
 }
+
+export default LazyImg

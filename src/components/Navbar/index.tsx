@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Avatar, Dropdown, Menu, Typography } from '@arco-design/web-react'
-import { ReducerState } from '@/redux'
-import styles from './style/index.module.less'
 import useLocale from '@/hooks/useLocale'
 import { history } from '@/route'
 import setPageIcon from '@/utils/set-page-icon'
+import styles from './style/index.module.less'
 import Setteing from './setteing'
+import type { ReducerState } from '@/redux'
 
 interface INavBar {
     className: string

@@ -1,6 +1,7 @@
 import React from 'react'
-import { Route, Redirect, RouteProps } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 import checkLogin from '@/utils/checkLogin'
+import type { RouteProps } from 'react-router-dom'
 
 const AuthRoute: React.FC<RouteProps> = props => {
     const { path, component, location } = props

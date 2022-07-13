@@ -1,4 +1,4 @@
-import { MockMethod } from 'vite-plugin-mock'
+import type { MockMethod } from 'vite-plugin-mock'
 
 export default [
     {
@@ -6,7 +6,7 @@ export default [
         method: 'post',
         timeout: 1000,
         response: (data: any) => {
-            console.log('data :>> ', data.body)
+            console.log('data :>>', data.body)
             if (data.body?.username === 'admin' && data.body?.password === 'admin') {
                 return {
                     code: 0,
@@ -59,7 +59,7 @@ export default [
         method: 'post',
         timeout: 2000,
         response: (data: any) => {
-            console.log('data :>> ', data)
+            console.log('data :>>', data)
             return {
                 code: 0,
                 message: '添加成功',

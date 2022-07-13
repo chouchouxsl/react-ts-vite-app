@@ -1,21 +1,23 @@
-import React, { useMemo, useState, lazy, useEffect, useRef } from 'react'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import React, { lazy, useEffect, useMemo, useRef, useState } from 'react'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Layout, Menu } from '@arco-design/web-react'
 import { IconMenuFold, IconMenuUnfold } from '@arco-design/web-react/icon'
 import qs from 'query-string'
-import { ReducerState } from '@/redux'
 import { isArray } from '@/utils/is'
-import { IRoutes, useRoutes, history } from '@/route'
+import { history, useRoutes } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Breadcrumb from '@/components/Breadcrumb'
 import darkTheme from '@/utils/systemTheme'
 // 样式
-import styles from './style/layout.module.less'
 import { setPageTitle } from '@/utils/set-page-title'
-import { Roles, ThemeEnum } from '@/enums/globalEnums'
+import { ThemeEnum } from '@/enums/globalEnums'
+import styles from './style/layout.module.less'
+import type { Roles } from '@/enums/globalEnums'
+import type { IRoutes } from '@/route'
+import type { ReducerState } from '@/redux'
 
 // 布局组件
 const Sider = Layout.Sider
@@ -43,7 +45,7 @@ function getFlattenRoutes(routes: IRoutes[]) {
                 }
                 newRoutes.push(route)
             }
-            if (isArray(route.children) && (route.children as IRoutes[]).length) {
+            if (isArray(route.children) && (route.children as IRoutes[]).length > 0) {
                 recursion(route.children as IRoutes[])
             }
         })
@@ -123,11 +125,9 @@ function PageLayout() {
     function conversionRouteKey(arr: any[], str: string) {
         let rc = ''
         arr.forEach(key => {
-            const reg = RegExp(`^${key}`)
-            if (reg.test(str)) {
-                if (key.length > rc.length) {
-                    rc = key
-                }
+            const reg = new RegExp(`^${key}`)
+            if (reg.test(str) && key.length > rc.length) {
+                rc = key
             }
         })
         return rc
@@ -181,7 +181,7 @@ function PageLayout() {
                 /* 设置hidden的 不生成菜单 */
                 if (hidden) return ''
 
-                if (visibleChildren.length) {
+                if (visibleChildren.length > 0) {
                     return (
                         <SubMenu key={route.key} title={contentDom}>
                             {recursion(route.children as IRoutes[], level + 1, [...parentRoute, route])}
