@@ -1,5 +1,5 @@
 import { viteMockServe } from 'vite-plugin-mock'
-import { ViteEnv } from '../../src/typings/config'
+import type { ViteEnv } from '../../src/typings/config'
 
 export default function createMockServe(viteEnv: ViteEnv, isBuild: boolean) {
     return viteMockServe({
