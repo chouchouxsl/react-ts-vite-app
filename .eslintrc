@@ -1,4 +1,7 @@
-/* see https://github.com/chouchouxsl/my-eslint-config */
+/**
+ * @description: This is my eslint config
+ * @see  https://github.com/chouchouxsl/my-eslint-config
+ */
 {
   "extends": "@r_h_zero"
 }
