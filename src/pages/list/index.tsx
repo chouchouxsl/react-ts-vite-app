@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IconDelete, IconEye } from '@arco-design/web-react/icon'
 import { Button, Form, Input, List, Message, Modal, Pagination, Popconfirm, Spin } from '@arco-design/web-react'
-import { crawlingActorListApi, deleteActorItemApi, getListAllApi } from '@/api'
+import { deleteActorItemApi, getListApi } from '@/api'
 import { history } from '@/route'
 import useLocale from '@/hooks/useLocale'
 import LazyImg from '@/components/LazyImg'
@@ -34,11 +34,11 @@ const AList: React.FC = () => {
     }
 
     useEffect(() => {
-        // getList()
+        getList()
     }, [effect])
 
     async function getList() {
-        const { list, total } = await getListAllApi({
+        const { list, total } = await getListApi({
             pageNum: page.pageNum,
             pageSize: page.pageSize,
             actor_name: name
@@ -186,7 +186,7 @@ const AList: React.FC = () => {
                                     await form.validate()
                                     const { link: url } = form.getFields()
                                     setLoading(true)
-                                    await crawlingActorListApi({ url })
+                                    console.log('🤪 link >>:', url)
                                     setLoading(false)
                                     Message.success('success')
                                 } catch {}
