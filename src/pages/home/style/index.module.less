@@ -1,36 +1,24 @@
 .pages {
+    display: flex;
+    justify-content: center;
     padding: 20px;
     width: 100%;
+    min-height: 100vh;
     box-sizing: border-box;
 
-    .name {
-        margin-bottom: 20px;
-        font-size: 20px;
-    }
+    .ground {
+        margin-top: 20px;
+        width: 90%;
+        color: @textColor1;
 
-    .avatar {
-        width: 40px;
-        height: 40px;
-    }
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
 
-    .warp {
-        display: flex;
-        width: 100%;
-        flex-wrap: wrap;
-
-        .item {
-            flex: 1;
-
-            div {
+            h1 {
                 margin-bottom: 20px;
-                font-size: 14px;
-                font-weight: 400;
-            }
-
-            img {
-                width: 300px;
-                height: 240px;
-                object-fit: cover;
             }
         }
     }

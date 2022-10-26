@@ -1,6 +1,7 @@
 import React from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import Setteing from '@/components/Navbar/setteing'
+import GroundGlassbg from '@/components/GroundGlassbg'
 import checkLogin from '@/utils/checkLogin'
 import LoginForm from './form'
 import styles from './style/index.module.less'
@@ -18,7 +19,9 @@ const Login: FC = () => {
             <ul className={styles['app-setteing']}>
                 <Setteing />
             </ul>
-            <div className={styles['banner-warp']} />
+            <div className={styles['banner-warp']}>
+                <GroundGlassbg height="100vh" blur="4px" />
+            </div>
             <div className={styles['form-warp']}>
                 <LoginForm />
             </div>

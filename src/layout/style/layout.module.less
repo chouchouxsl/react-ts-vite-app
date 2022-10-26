@@ -1,5 +1,5 @@
 @nav-size-height: 60px;
-@layout-max-width: 1100px;
+@layout-max-width: 900px;
 
 .layout {
     width: 100%;
@@ -18,21 +18,40 @@
 
 .layoutSider {
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     z-index: 99;
-    height: 100%;
+    padding-top: 0 !important;
+    height: calc(100vh - @nav-size-height);
     box-sizing: border-box;
+    background-color: @opBgColor;
+    backdrop-filter: @bg-filter;
 
-    &::after {
-        position: absolute;
-        top: 0;
-        right: -1px;
-        display: block;
-        width: 1px;
-        height: 100%;
-        background-color: var(--color-border);
-        content: '';
+    // &::after {
+    //     position: absolute;
+    //     top: 0;
+    //     right: -1px;
+    //     display: block;
+    //     width: 1px;
+    //     height: 100%;
+    //     background-color: var(--color-border);
+    //     content: '';
+    // }
+
+    :global {
+        .arco-menu {
+            margin: 28px auto;
+
+            &:not(.arco-menu-pop) {
+                border-radius: 6px;
+                padding: 8px;
+                width: 90%;
+            }
+        }
+
+        .arco-layout-sider-light {
+            box-shadow: none !important;
+        }
     }
 
     > :global(.arco-layout-sider-children) {
@@ -66,9 +85,10 @@
 }
 
 .layoutContent {
+    position: relative;
     min-width: @layout-max-width;
     min-height: 100vh;
-    background-color: var(--color-fill-1);
+    background-color: var(--color-fill-2);
     transition: padding-left 0.2s;
     box-sizing: border-box;
 }

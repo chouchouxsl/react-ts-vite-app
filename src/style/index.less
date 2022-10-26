@@ -1,6 +1,15 @@
 @import 'var.less';
 @import 'reset.less';
 
+:root body {
+    --op-color: rgba(255, 255, 255, 70%);
+    --bg-filter: saturate(50%) blur(8px);
+
+    &[arco-theme='dark'] {
+        --op-color: rgba(35, 35, 36, 70%);
+    }
+}
+
 html,
 body {
     margin: 0;
@@ -9,7 +18,7 @@ body {
     height: 100vh;
     box-sizing: border-box;
     font-size: @textSize2;
-    color: @textColor2;
+    color: @textColor1;
     background-color: @bgColor1;
 }
 

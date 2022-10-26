@@ -4,7 +4,7 @@
     "menu": true,
     "footer": true,
     "themeColor": "#5A25B0",
-    "menuWidth": 220,
+    "menuWidth": 240,
     "title": "React Ts Pro",
     "logo": "relian",
     "isShowNprogress": true

@@ -1,10 +1,10 @@
 .warp {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid var(--color-border);
     width: 100%;
     height: 100%;
-    background-color: var(--color-bg-2);
+    backdrop-filter: @bg-filter;
+    background-color: @opBgColor;
     box-sizing: border-box;
 
     .left {
@@ -21,7 +21,7 @@
             font-size: 22px;
             font-family: 'Times New Roman', Times, serif;
             font-weight: bold;
-            color: var(--color-text-2);
+            color: @textColor1;
         }
     }
 
