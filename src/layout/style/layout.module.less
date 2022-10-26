@@ -48,10 +48,6 @@
                 width: 90%;
             }
         }
-
-        .arco-layout-sider-light {
-            box-shadow: none !important;
-        }
     }
 
     > :global(.arco-layout-sider-children) {
@@ -86,9 +82,9 @@
 
 .layoutContent {
     position: relative;
+    z-index: 0;
     min-width: @layout-max-width;
     min-height: 100vh;
-    background-color: var(--color-fill-2);
     transition: padding-left 0.2s;
     box-sizing: border-box;
 }
