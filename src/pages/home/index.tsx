@@ -15,7 +15,7 @@ const Home: React.FC = () => {
     return (
         <div className={style.pages}>
             <div className={style.ground}>
-                <GroundGlassbg radius="30px" height="400px">
+                <GroundGlassbg radius="30px" blur="8px" height="400px">
                     <div className={style.content}>
                         <h1 className={style.none}>{t['home.title']}</h1>
                         <Typed

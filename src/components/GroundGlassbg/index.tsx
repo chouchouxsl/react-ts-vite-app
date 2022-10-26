@@ -1,7 +1,16 @@
 import React from 'react'
 import style from './style/index.module.less'
+interface IGroundGlassbg {
+    height: string
+    saturate: string
+    url: string
+    defaultBgColor: string
+    blur: string
+    radius: string
+    children: any
+}
 
-const GroundGlassbg: React.FC<any> = (props: any) => {
+const GroundGlassbg: React.FC<any> = (props: IGroundGlassbg) => {
     const {
         height = '300px',
         saturate = '50%',
