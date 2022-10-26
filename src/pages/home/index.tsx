@@ -1,27 +1,35 @@
-import React, { Component } from 'react'
-import SvgIcon from '@/components/SvgIcon'
-import AuthWarp from '@/components/AuthWarp'
-import { Roles } from '@/enums/globalEnums'
+import React, { useEffect, useState } from 'react'
+import Typed from 'react-typed'
+import GroundGlassbg from '@/components/GroundGlassbg'
+import useLocale from '@/hooks/useLocale'
 import style from './style/index.module.less'
 
-class Home extends Component {
-    public socket: any
+const Home: React.FC = () => {
+    const t = useLocale()
+    const [typed, setTyped] = useState<any>()
 
-    status = {
-        name: '首页'
-    }
+    useEffect(() => {
+        typed && typed.reset()
+    })
 
-    render() {
-        return (
-            <div className={style.pages} onClick={() => this.socket.emit('message', 'xxxxx')}>
-                <AuthWarp roles={[Roles.MEMBER]}>
-                    <SvgIcon name="dark" color="red" />
-                    status: {this.status.name}
-                </AuthWarp>
-                首页
+    return (
+        <div className={style.pages}>
+            <div className={style.ground}>
+                <GroundGlassbg radius="30px" height="400px">
+                    <div className={style.content}>
+                        <h1 className={style.none}>{t['home.title']}</h1>
+                        <Typed
+                            typeSpeed={80}
+                            strings={[t['home.title']]}
+                            typedRef={(typed: any) => {
+                                setTyped(typed)
+                            }}
+                        />
+                    </div>
+                </GroundGlassbg>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default Home

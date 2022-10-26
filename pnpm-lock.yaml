@@ -32,6 +32,7 @@ specifiers:
   react-lazyload: ^3.2.0
   react-redux: ^7.2.6
   react-router-dom: ^5.2.1
+  react-typed: ^1.2.0
   redux: ^4.1.2
   socket.io-client: ^4.5.1
   stylelint: ^14.2.0
@@ -59,6 +60,7 @@ dependencies:
   react-lazyload: 3.2.0_sfoxds7t5ydpegc3knd667wn6m
   react-redux: 7.2.8_sfoxds7t5ydpegc3knd667wn6m
   react-router-dom: 5.3.3_react@17.0.2
+  react-typed: 1.2.0_sfoxds7t5ydpegc3knd667wn6m
   redux: 4.2.0
   socket.io-client: 4.5.1
 
@@ -4990,6 +4992,18 @@ packages:
       react-dom: 17.0.2_react@17.0.2
     dev: false
 
+  /react-typed/1.2.0_sfoxds7t5ydpegc3knd667wn6m:
+    resolution: {integrity: sha512-aDsaA6zkjAFJs8285APOqE85l/kwJ0/ZJmBhARwUrza4TTttrMM5FcMCGEDdThdfUdHo/0l9WXmxp1m2ik4qdw==}
+    peerDependencies:
+      react: ^16.3.0
+      react-dom: ^16.3.0
+    dependencies:
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      typed.js: 2.0.12
+    dev: false
+
   /react/17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
     engines: {node: '>=0.10.0'}
@@ -5991,6 +6005,10 @@ packages:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
     dev: true
+
+  /typed.js/2.0.12:
+    resolution: {integrity: sha512-lyACZh1cu+vpfYY3DG/bvsGLXXbdoDDpWxmqta10IQUdMXisMXOEyl+jos+YT9uBbzK4QaKYBjT3R0kTJO0Slw==}
+    dev: false
 
   /typescript/4.7.4:
     resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
